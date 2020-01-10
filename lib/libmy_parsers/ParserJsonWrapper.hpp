@@ -11,7 +11,7 @@
 
 class ParserJsonWrapper {
     public:
-        [[nodiscard]] auto loadJson(const std::string & filename) const noexcept -> boost::optional<nlohmann::json>;
+        [[nodiscard]] static auto loadJson(const std::string & filename) noexcept -> boost::optional<nlohmann::json>;
 };
 
 

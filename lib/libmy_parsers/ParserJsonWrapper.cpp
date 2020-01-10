@@ -8,7 +8,7 @@
 #include <boost/optional.hpp>
 #include "ParserJsonWrapper.hpp"
 
-boost::optional<nlohmann::json> ParserJsonWrapper::loadJson(const std::string &filename) const noexcept
+boost::optional<nlohmann::json> ParserJsonWrapper::loadJson(const std::string &filename) noexcept
 {
     std::ifstream   i(filename);
     nlohmann::json  j;

@@ -3,17 +3,15 @@ project(libmy_parsers)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
-add_library(my_parsers STATIC
-        ParserJsonWrapper.cpp)
+add_executable(tests_libmy_parsers Test_ParserJsonWrapper.cpp)
+target_link_libraries(tests_libmy_parsers my_parsers)
 
-target_include_directories(my_parsers SYSTEM PUBLIC
-        nolhmann_json_library/include
-        ${Boost_INCLUDE_DIRS})
+target_include_directories(tests_libmy_parsers PUBLIC ../)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    target_compile_options(my_parsers PRIVATE
+    target_compile_options(tests_libmy_parsers PRIVATE
             -Wall
             -Wextra
             -Wshadow
@@ -34,5 +32,4 @@ if(CMAKE_COMPILER_IS_GNUCXX)
             -Wuseless-cast)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-#enable_testing()
-add_subdirectory(tests/)
+#add_test()

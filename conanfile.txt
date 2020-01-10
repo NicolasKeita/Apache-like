@@ -1,0 +1,15 @@
+[requires]
+boost/1.71.0@conan/stable
+
+[build_requires]
+
+[options]
+#boost:shared=True
+
+[generators]
+cmake
+visual_studio
+
+[imports]
+bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder
+lib/, *.so* -> ./bin

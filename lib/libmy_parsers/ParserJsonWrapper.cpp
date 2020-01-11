@@ -17,7 +17,7 @@ boost::optional<nlohmann::json> ParserJsonWrapper::loadJson(const std::string &f
         i >> j;
         return j;
     } else {
-        std::cerr << "Unable to read the file :  " << filename << std::endl;
+        std::cerr << std::flush << "Unable to read the file :  " << filename << std::endl;
         return boost::none;
     }
 }

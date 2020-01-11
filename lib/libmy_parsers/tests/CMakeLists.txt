@@ -3,7 +3,7 @@ project(libmy_parsers)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost REQUIRED)
 
 add_executable(tests_libmy_parsers Test_ParserJsonWrapper.cpp)
 target_link_libraries(tests_libmy_parsers my_parsers)
@@ -31,5 +31,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
             -Wlogical-op
             -Wuseless-cast)
 endif(CMAKE_COMPILER_IS_GNUCXX)
+
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/json_correct.json
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/json_correct.json
+        COPYONLY)
 
 #add_test()

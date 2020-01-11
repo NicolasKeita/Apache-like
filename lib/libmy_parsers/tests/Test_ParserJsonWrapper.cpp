@@ -15,6 +15,20 @@ BOOST_AUTO_TEST_CASE( Test_ParserJsonWrapper_bad_filename )
 
 BOOST_AUTO_TEST_CASE( Test_ParserJsonWrapper_correct_json )
 {
-    nlohmann::json  j;
-    BOOST_CHECK(ParserJsonWrapper::loadJson("json_correct.json") == j);
+    // Compare with a file .json
+    nlohmann::json  expectedResult = {
+            {"pi", 3.141},
+            {"happy", true},
+            {"name", "Niels"},
+            {"nothing", nullptr},
+            {"answer", {
+                {"everything", 42}
+            }},
+            {"list", {1, 0, 2}},
+            {"object", {
+                {"currency", "USD"},
+                {"value", 42.99}
+            }}
+    };
+    BOOST_CHECK(ParserJsonWrapper::loadJson("json_correct.json") == expectedResult);
 }

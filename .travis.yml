@@ -25,7 +25,7 @@ matrix:
         # python and conan installation
         - export -f travis_fold travis_nanoseconds travis_time_start travis_time_finish
         - choco install python3 --params "/InstallDir:C:\\Python"
-        - choco install -y visualstudio2019community visualstudio2019-workload-nativecrossplat
+        - choco install -y visualstudio2019buildtools
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
         - pip3 install --user -U conan
         - conan user

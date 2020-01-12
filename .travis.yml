@@ -14,16 +14,14 @@ before_install:
   - |
     if [ "$TRAVIS_OS_NAME" == "windows" ]; then
       cinst -y python
-      echo "old PATH=$PATH"
       refreshenv
-      echo "new PATH=$PATH"
+      pip3 install conan
+    else
+      pyenv global $(pyenv whence 2to3)
+      PY_CMD=python3
+      $PY_CMD -m pip install --user --upgrade conan
     fi
-  - echo "now PATH=$PATH"
-  #- pip3 install
 
-  - pyenv global $(pyenv whence 2to3)
-  - PY_CMD=python3
-  - $PY_CMD -m pip install --user --upgrade conan
   - conan user # set conan profile
   - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 

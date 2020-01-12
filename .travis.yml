@@ -1,0 +1,54 @@
+
+os: linux
+language: cpp
+dist: bionic # Ubuntu version 18.04.3 LTS
+
+compiler:
+  - gcc
+
+before_install:
+  - pyenv global $(pyenv whence 2to3)
+  - PY_CMD=python3
+  - $PY_CMD -m pip install --user --upgrade conan
+  - conan user # set conan profile
+  - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
+install:
+  # This will install the last version of Cmake
+  #
+  # first we create a directory for the CMake binaries
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
+  # we use wget to fetch the cmake binaries
+  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.16/cmake-3.16.0-Linux-x86_64.tar.gz
+  # extract the binaries; the output here is quite lengthy,
+  # so we swallow it to not clutter up the travis console
+  - tar -xvf cmake-3.16.0-Linux-x86_64.tar.gz > /dev/null
+  - mv cmake-3.16.0-Linux-x86_64 cmake-install
+  # add both the top-level directory and the bin directory from the archive
+  # to the system PATH. By adding it to the front of the path we hide the
+  # preinstalled CMake with our own.
+  - PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH
+  # don't forget to switch back to the main build directory once you are done
+  - cd ${TRAVIS_BUILD_DIR}
+
+before_script:
+  - mkdir -p ./build/
+  - cd ./build/
+  #- conan install ../ --build=missing -s compiler=gcc -s compiler.version=7.4 -s compiler.libcxx=libstdc++11 -s build_type=Release -g virtualenv
+  - conan install ../ --build=missing -s compiler.libcxx=libstdc++11 -s build_type=Release -g virtualenv
+  - source activate.sh
+  - cmake -DCMAKE_BUILD_TYPE=Release ../
+
+script:
+  - cmake --build ./
+
+after_script:
+  - cp bin/r-type_client ../
+  - cd ../
+  #run tests on network library
+  - cd lib/uti/my_network/
+  - mkdir -p ./build/
+  - cd ./build/
+  - cmake ../
+  - make test

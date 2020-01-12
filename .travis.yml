@@ -1,13 +1,12 @@
 
-os:
-  - linux
-  - windows
 
-language: cpp
-dist: bionic # Ubuntu version 18.04.3 LTS
-
-compiler:
-  - gcc
+matrix:
+  include:
+    - os: linux
+      dist: bionic # Ubuntu version 18.04.3 LTS
+      language: c++
+      compiler:
+        - gcc
 
 before_install:
 

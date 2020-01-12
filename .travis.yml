@@ -18,7 +18,10 @@ matrix:
     - os: windows
       language: c++
       compiler: msvc
+      env:
+        - MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"
       before_install:
+        - eval "${MATRIX_EVAL}"
         # python and conan installation
         - export -f travis_fold travis_nanoseconds travis_time_start travis_time_finish
         - choco install python3 --params "/InstallDir:C:\\Python"

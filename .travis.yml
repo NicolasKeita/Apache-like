@@ -13,7 +13,7 @@ matrix:
 
     - os: windows
       language: c++
-      compiler: msvc
+      compiler: gcc
       before_install:
         # python and conan installation
         - export -f travis_fold travis_nanoseconds travis_time_start travis_time_finish

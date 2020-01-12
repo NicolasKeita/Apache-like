@@ -6,29 +6,24 @@ matrix:
       dist: bionic # Ubuntu version 18.04.3 LTS
       language: c++
       compiler: gcc
+      before_install:
+        # conan installation
+        - pyenv global $(pyenv whence 2to3)
+        - python3 -m pip install --user --upgrade conan
+
     - os: windows
       language: c++
       compiler: msvc
       before_install:
+        # python and conan installation
         - export -f travis_fold travis_nanoseconds travis_time_start travis_time_finish
         - choco install python3 --params "/InstallDir:C:\\Python"
-        - choco install swig
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
-        - pip3 install --user -U numpy
+        - pip3 install --user -U conan
       after_success:
         - cd $BASE_DIR
 
 before_install:
-
-  - |
-    if [ "$TRAVIS_OS_NAME" == "windows" ]; then
-      cinst -y python
-      pip install conan
-    else
-      pyenv global $(pyenv whence 2to3)
-      PY_CMD=python3
-      $PY_CMD -m pip install --user --upgrade conan
-    fi
 
   - conan user
   - conan profile new default --detect

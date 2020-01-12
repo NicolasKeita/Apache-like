@@ -21,6 +21,7 @@ before_install:
     fi
 
   - conan user
+  - conan profile new default --detect
   - |
     if [ "$TRAVIS_COMPILER" == "gcc" ]; then
       conan profile update settings.compiler.libcxx=libstdc++11 default

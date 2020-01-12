@@ -26,10 +26,8 @@ matrix:
         - pip3 install --user -U conan
         - conan user
         - conan profile new default --detect
-        - conan profile update settings.compiler.libcxx=libstdc++11 default
+        - conan profile update settings.compiler.libcxx=libstdc++ default
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-      after_success:
-        - cd $BASE_DIR
 
 install:
   # This will install the last version of Cmake

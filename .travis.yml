@@ -5,8 +5,18 @@ matrix:
     - os: linux
       dist: bionic # Ubuntu version 18.04.3 LTS
       language: c++
-      compiler:
-        - gcc
+      compiler: gcc
+    - os: windows
+      language: c++
+      compiler: msvc
+      before_install:
+        - export -f travis_fold travis_nanoseconds travis_time_start travis_time_finish
+        - choco install python3 --params "/InstallDir:C:\\Python"
+        - choco install swig
+        - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
+        - pip3 install --user -U numpy
+      after_success:
+        - cd $BASE_DIR
 
 before_install:
 

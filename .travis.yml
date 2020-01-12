@@ -20,7 +20,11 @@ before_install:
       $PY_CMD -m pip install --user --upgrade conan
     fi
 
-  - conan user # set conan profile
+  - conan user
+  - |
+    if [ "$TRAVIS_COMPILER" == "gcc" ]; then
+      conan profile update settings.compiler.libcxx=libstdc++11 default
+    fi
   - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 install:

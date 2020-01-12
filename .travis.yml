@@ -10,6 +10,10 @@ matrix:
         # conan installation
         - pyenv global $(pyenv whence 2to3)
         - python3 -m pip install --user --upgrade conan
+        - conan user
+        - conan profile new default --detect
+        - conan profile update settings.compiler.libcxx=libstdc++11 default
+        - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
     - os: windows
       language: c++
@@ -20,18 +24,12 @@ matrix:
         - choco install python3 --params "/InstallDir:C:\\Python"
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
         - pip3 install --user -U conan
+        - conan user
+        - conan profile new default --detect
+        - conan profile update settings.compiler.libcxx=libstdc++11 default
+        - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
       after_success:
         - cd $BASE_DIR
-
-before_install:
-
-  - conan user
-  - conan profile new default --detect
-  - |
-    if [ "$TRAVIS_COMPILER" == "gcc" ]; then
-      conan profile update settings.compiler.libcxx=libstdc++11 default
-    fi
-  - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 install:
   # This will install the last version of Cmake

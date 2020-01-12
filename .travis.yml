@@ -1,5 +1,8 @@
 
-os: linux
+os:
+  - linux
+  - windows
+
 language: cpp
 dist: bionic # Ubuntu version 18.04.3 LTS
 

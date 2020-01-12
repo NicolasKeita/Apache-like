@@ -18,14 +18,15 @@ matrix:
     - os: windows
       language: c++
       compiler: msvc
-      env:
-        - MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"
+      #env:
+       #- MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"
       before_install:
-        - eval "${MATRIX_EVAL}"
+        #- eval "${MATRIX_EVAL}"
         # python and conan installation
         - export -f travis_fold travis_nanoseconds travis_time_start travis_time_finish
         - choco install python3 --params "/InstallDir:C:\\Python"
-        - choco install -y visualstudio2019-workload-nativedesktop visualstudio2019-workload-vctools visualstudio2019-workload-nativegame visualstudio2019-workload-nativemobile
+        - choco install -y visualstudio2019-workload-nativedesktop
+        #- choco install -y visualstudio2019-workload-nativedesktop visualstudio2019-workload-vctools visualstudio2019-workload-nativegame visualstudio2019-workload-nativemobile
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
         - pip3 install --user -U conan
         - conan user

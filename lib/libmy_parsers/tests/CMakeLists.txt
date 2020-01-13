@@ -37,4 +37,4 @@ configure_file(
         json_correct.json
         COPYONLY)
 
-add_test(NAME test_name COMMAND tests_libmy_parsers)
+add_test(NAME tests_lib_myparsers COMMAND tests_libmy_parsers)

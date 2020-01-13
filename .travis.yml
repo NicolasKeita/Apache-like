@@ -4,7 +4,7 @@ matrix:
   include:
     - os: linux
       dist: bionic # Ubuntu version 18.04.3 LTS
-      language: c++
+      language: cpp
       compiler: gcc
       before_install:
         # conan installation
@@ -16,7 +16,7 @@ matrix:
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
     - os: windows
-      language: c++
+      language: cpp
       compiler: msvc
       env:
        - MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"

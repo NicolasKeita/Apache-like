@@ -24,7 +24,7 @@ matrix:
         - eval "${MATRIX_EVAL}"
         # python and conan installation
         - choco install python3 --params "/InstallDir:C:\\Python"
-        # - choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop
+        - choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop
         - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then dir "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64"; fi
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
         - pip3 install --user -U conan
@@ -57,7 +57,7 @@ before_script:
   - mkdir -p ./build/
   - cd ./build/
   #- conan install ../ --build=missing -s compiler=gcc -s compiler.version=7.4 -s compiler.libcxx=libstdc++11 -s build_type=Release -g virtualenv
-  - conan install ../ --build=missing -s build_type=Release -s compiler="Visual Studio" -s compiler.version=14 -s compiler.cppstd=14 -g virtualenv
+  - conan install ../ --build=missing -s build_type=Release -s compiler="Visual Studio" -s compiler.version=16 -s compiler.cppstd=20 -g virtualenv
   - source activate.sh
   - cmake -DCMAKE_BUILD_TYPE=Release ../ -DCMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64\cl.exe"
 

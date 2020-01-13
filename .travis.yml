@@ -21,7 +21,7 @@ matrix:
       env:
        - MATRIX_EVAL="CC=cl.exe && CXX=cl.exe"
       before_install:
-        - eval "${MATRIX_EVAL}"
+        # - eval "${MATRIX_EVAL}"
         # python and conan installation
         - choco install python3 --params "/InstallDir:C:\\Python"
         - choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop
@@ -30,8 +30,9 @@ matrix:
         - pip3 install --user -U conan
         - conan user
         - conan profile new default --detect
-        - conan profile new test_profile --detect
-        #- conan profile update settings.compiler.libcxx=libstdc++ default
+        - conan profile update settings.compiler="Visual Studio" default
+        - conan profile update settings.compiler.version=16 default
+        - conan profile update settings.compiler.cppstd=14 default
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 install:
@@ -58,7 +59,7 @@ before_script:
   - cd ./build/
   - |
     if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-      conan install ../ --build=missing -s build_type=Release -s compiler="Visual Studio" -s compiler.version=16 -s compiler.cppstd=17 -g virtualenv
+      conan install ../ --build=missing -s build_type=Release -s compiler="Visual Studio" -s compiler.version=16 -s compiler.cppstd=14 -g virtualenv
     else
       conan install ../ --build=missing -s build_type=Release -g virtualenv
     fi

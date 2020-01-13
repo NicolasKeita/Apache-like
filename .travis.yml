@@ -57,7 +57,7 @@ before_script:
   - mkdir -p ./build/
   - cd ./build/
   #- conan install ../ --build=missing -s compiler=gcc -s compiler.version=7.4 -s compiler.libcxx=libstdc++11 -s build_type=Release -g virtualenv
-  - conan install ../ --build=missing -s build_type=Release -g virtualenv
+  - conan install ../ --build=missing -s build_type=Release -s compiler="Visual Studio" -s compiler.version=16 -s compiler.cppstd=14 -g virtualenv
   - source activate.sh
   - cmake -DCMAKE_BUILD_TYPE=Release ../
 

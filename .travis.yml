@@ -17,9 +17,9 @@ matrix:
 
     - os: windows
       language: cpp
-      compiler: msvc
-      env:
-       - MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"
+      compiler: clang
+#      env:
+#       - MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"
       before_install:
         # - eval "${MATRIX_EVAL}"
         # python and conan installation

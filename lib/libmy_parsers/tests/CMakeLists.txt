@@ -34,7 +34,7 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/json_correct.json
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/json_correct.json
+        json_correct.json
         COPYONLY)
 
 add_test(NAME test_name COMMAND tests_libmy_parsers)

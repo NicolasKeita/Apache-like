@@ -72,4 +72,4 @@ after_script:
   - cd ./build/
   - cmake ../
   - cmake --build ./
-  - CTest
+  - ctest

@@ -1,10 +1,10 @@
 
 
-matrix:
+language: cpp
+jobs:
   include:
     - os: linux
       dist: bionic # Ubuntu version 18.04.3 LTS
-      language: cpp
       compiler: gcc
       before_install:
         # conan installation
@@ -16,7 +16,6 @@ matrix:
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
     - os: windows
-      language: cpp
       compiler: msvc
       before_install:
         # python and conan installation
@@ -24,12 +23,12 @@ matrix:
         - choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop
         - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then dir "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64"; fi
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
-        - pip3 install --user -U conan
+        - pip3 install --user --upgrade conan
         - conan user
         - conan profile new default --detect
         - conan profile remove settings.compiler.libcxx default
         - conan profile update settings.compiler="Visual Studio" default
-        - conan profile update settings.compiler.version=16 default
+        - conan profile update settings.compiler.version=16 default # Visual Studio 2019
         - conan profile update settings.compiler.cppstd=14 default
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 

@@ -37,4 +37,4 @@ configure_file(
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/json_correct.json
         COPYONLY)
 
-#add_test()
+add_test(NAME test_name COMMAND tests_libmy_parsers)

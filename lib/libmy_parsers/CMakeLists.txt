@@ -34,5 +34,5 @@ if(CMAKE_COMPILER_IS_GNUCXX)
             -Wuseless-cast)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-#enable_testing()
+enable_testing()
 add_subdirectory(tests/)

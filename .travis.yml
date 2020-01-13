@@ -21,7 +21,6 @@ jobs:
         # python and conan installation
         - choco install python3 --params "/InstallDir:C:\\Python"
         - choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop
-        #- if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then dir "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64"; fi
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
         - pip3 install --user --upgrade conan
         - conan user
@@ -61,3 +60,11 @@ before_script:
 script:
   - cmake --build ./
 
+after_script:
+  #run tests on network library
+  - cd ../lib/libmy_parsers/
+  - mkdir -p ./build/
+  - cd ./build/
+  - cmake ../
+  - cmake --build ./
+  - CTest

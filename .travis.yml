@@ -19,9 +19,9 @@ matrix:
       language: cpp
       compiler: msvc
       env:
-       - CC=
-       - CXX=
+       - MATRIX_EVAL="CC=cl.exe && CXX=cl.exe"
       before_install:
+        - eval "${MATRIX_EVAL}"
         # python and conan installation
         - choco install python3 --params "/InstallDir:C:\\Python"
         # - choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop

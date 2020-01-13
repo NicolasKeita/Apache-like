@@ -59,9 +59,9 @@ before_script:
   #- conan install ../ --build=missing -s compiler=gcc -s compiler.version=7.4 -s compiler.libcxx=libstdc++11 -s build_type=Release -g virtualenv
   - conan install ../ --build=missing -s build_type=Release -s compiler="Visual Studio" -s compiler.version=16 -s compiler.cppstd=20 -g virtualenv
   - source activate.sh
-  - cmake -DCMAKE_BUILD_TYPE=Release ../ -DCMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64\cl.exe"
+  #- cmake -DCMAKE_BUILD_TYPE=Release ../ -DCMAKE_CXX_COMPILER="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64\cl.exe"
+  - cmake -DCMAKE_BUILD_TYPE=Release ../
 
 script:
   - cmake --build ./
 
-after_script:

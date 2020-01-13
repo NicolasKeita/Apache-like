@@ -55,7 +55,7 @@ before_script:
   - cd ./build/
   - conan install ../ --build=missing -s build_type=Release -g virtualenv
   - |
-    if [ "TRAVIS_OS_NAME" == "windows" ]; then
+    if [ "$TRAVIS_OS_NAME" = "windows" ]; then
       ./activate.ps1
       dir ./
       echo test

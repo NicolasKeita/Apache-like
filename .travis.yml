@@ -56,8 +56,8 @@ before_script:
   - conan install ../ --build=missing -s build_type=Release -g virtualenv
   - |
     if [ "$TRAVIS_OS_NAME" = "windows" ]; then
-      powershell
-      ./activate.ps1
+#      powershell
+      start activate.ps1
     else
       source activate.sh
     fi
@@ -72,6 +72,9 @@ script:
   - mkdir -p ./build/
   - cd ./build/
   - cmake ../
-  - cat C:/Users/travis/build/NicolasKeita/My_Apache/lib/libmy_parsers/build/CMakeFiles/CMakeOutput.log
+  - |
+    if [ "$TRAVIS_OS_NAME" = "windows" ]; then
+      cat C:/Users/travis/build/NicolasKeita/My_Apache/lib/libmy_parsers/build/CMakeFiles/CMakeOutput.log
+    fi
   - cmake --build ./
   - ctest

@@ -3,19 +3,7 @@ project(libmy_parsers)
 
 set(CMAKE_CXX_STANDARD 20)
 
-#if (DEFINED CONAN_BOOST_ROOT)
-#    message("ICI ${CONAN_BOOST_ROOT}")
-#    find_package(Boost REQUIRED PATHS $ENV{BOOST_ROOT})
-    #set(Boost_NO_SYSTEM_PATHS TRUE)
-#    set(Boost_ROOT ${CONAN_BOOST_ROOT})
-#    set(Boost_INCLUDE_DIRS "${BOOST_ROOT}/include")
-#    set(Boost_INCLUDE_DIR "${BOOST_ROOT}/include")
-#    set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib")
-#endif()
-
-#message("ICI ${Boost_ROOT}")
 find_package(Boost REQUIRED)
-#find_package(Boost REQUIRED HINTS ${CONAN_BOOST_ROOT})
 
 add_library(my_parsers STATIC
         ParserJsonWrapper.cpp)

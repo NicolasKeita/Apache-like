@@ -3,6 +3,13 @@ project(libmy_parsers)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if (DEFINED ENV{BOOST_ROOT})
+    set(Boost_NO_SYSTEM_PATHS TRUE)
+    set(BOOST_ROOT $ENV{BOOST_ROOT})
+    set(BOOST_INCLUDE_DIRS "${BOOST_ROOT}/include")
+    set(BOOST_LIBRARY_DIRS "${BOOST_ROOT}/lib")
+endif()
+
 find_package(Boost REQUIRED)
 
 add_library(my_parsers STATIC

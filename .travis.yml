@@ -54,14 +54,13 @@ before_script:
   - mkdir -p ./build/
   - cd ./build/
   - conan install ../ --build=missing -s build_type=Release
-  - sed -i 's/read/read -r/g' activate.sh # to fix a little mistake in the .sh by Conan
+  - sed -i 's/read/read -r/g' activate.sh # to fix a little mistake in the .sh from Conan
   - source activate.sh
   - cmake -DCMAKE_BUILD_TYPE=Release ../
 
 script:
   - cmake --build ./
 
-#after_script:
   #run tests on network library
   - cd ../lib/libmy_parsers/
   - mkdir -p ./build/
@@ -72,5 +71,5 @@ script:
       cat C:/Users/travis/build/NicolasKeita/My_Apache/lib/libmy_parsers/build/CMakeFiles/CMakeOutput.log
     fi
   - cmake --build ./
-  - ctest
+  - ctest -C Debug
 

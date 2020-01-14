@@ -56,7 +56,8 @@ before_script:
   - conan install ../ --build=missing -s build_type=Release -g virtualenv
   - |
     if [ "$TRAVIS_OS_NAME" = "windows" ]; then
-      powershell activate.ps1
+      powershell
+      ./activate.ps1
     else
       source activate.sh
     fi

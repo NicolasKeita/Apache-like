@@ -9,6 +9,7 @@ boost:shared=False
 [generators]
 cmake
 visual_studio
+virtualenv
 
 [imports]
 bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder

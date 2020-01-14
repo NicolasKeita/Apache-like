@@ -53,7 +53,8 @@ install:
 before_script:
   - mkdir -p ./build/
   - cd ./build/
-  - conan install ../ --build=missing -s build_type=Release -g virtualenv
+  - conan install ../ --build=missing -s build_type=Release
+  - sed -i 's/read/read -r/g' activate.sh # to fix a little mistake in the .sh by Conan
   - source activate.sh
   - cmake -DCMAKE_BUILD_TYPE=Release ../
 

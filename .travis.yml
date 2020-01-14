@@ -20,7 +20,8 @@ jobs:
       before_install:
         # python and conan installation
         - choco install python3 --params "/InstallDir:C:\\Python"
-        - choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop
+        - choco install -y visualstudio2019buildtools
+        #- choco install -y visualstudio2019community visualstudio2019-workload-nativedesktop visualstudio2019buildtools
         - export PATH="/c/Python:/c/Python/Scripts:/c/Users/travis/AppData/Roaming/Python/Python38/Scripts:$PATH"
         - pip3 install --user --upgrade conan
         - conan user
@@ -38,11 +39,11 @@ install:
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
   # we use wget to fetch the cmake binaries
-  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.16/cmake-3.16.0-Linux-x86_64.tar.gz
+  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.tar.gz
   # extract the binaries; the output here is quite lengthy,
   # so we swallow it to not clutter up the travis console
-  - tar -xvf cmake-3.16.0-Linux-x86_64.tar.gz > /dev/null
-  - mv cmake-3.16.0-Linux-x86_64 cmake-install
+  - tar -xvf cmake-3.15.0-Linux-x86_64.tar.gz > /dev/null
+  - mv cmake-3.15.0-Linux-x86_64 cmake-install
   # add both the top-level directory and the bin directory from the archive
   # to the system PATH. By adding it to the front of the path we hide the
   # preinstalled CMake with our own.
@@ -54,12 +55,7 @@ before_script:
   - mkdir -p ./build/
   - cd ./build/
   - conan install ../ --build=missing -s build_type=Release -g virtualenv
-  - |
-    if [ "$TRAVIS_OS_NAME" = "windows" ]; then
-      source activate.sh
-    else
-      source activate.sh
-    fi
+  - source activate.sh
   - cmake -DCMAKE_BUILD_TYPE=Release ../
 
 script:

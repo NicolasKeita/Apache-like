@@ -10,7 +10,9 @@
 
 BOOST_AUTO_TEST_CASE( Test_ParserJsonWrapper_bad_filename )
 {
+    std::cerr << "[TEST libmy_parsers] Ignore test err log" << std::endl;
     BOOST_CHECK(ParserJsonWrapper::loadJson("bad_filename.json") == boost::none);
+    std::cerr << "[TEST libmy_parsers] err log end" << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE( Test_ParserJsonWrapper_correct_json )

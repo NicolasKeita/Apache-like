@@ -1,0 +1,7 @@
+
+Cool features :
+
+Test unitaire
+Integration Continue
+
+Encapsulation de librairies externes.

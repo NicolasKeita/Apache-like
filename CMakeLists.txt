@@ -9,4 +9,5 @@ else()
 endif()
 
 add_subdirectory("${CMAKE_HOME_DIRECTORY}/lib/libmy_parsers/")
+add_subdirectory("${CMAKE_HOME_DIRECTORY}/lib/uti/my_network/")
 add_subdirectory("${CMAKE_HOME_DIRECTORY}/srcs/")

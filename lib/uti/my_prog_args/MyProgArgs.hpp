@@ -18,7 +18,7 @@ namespace uti {
     class CannotOpenFile : public std::exception {};
     class MyProgArgs {
         public:
-            MyProgArgs(int argc, char **argv, char **env, int minArgs = 0) : _argv{argv, argv + argc}
+            MyProgArgs(int argc, char **argv, char **env, int minArgs) : _argv{argv, argv + argc}
             {
                 if (env == nullptr) {
                     std::cerr << "[MyProgArgs] No env found" << std::endl;

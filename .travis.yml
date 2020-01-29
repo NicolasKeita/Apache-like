@@ -15,6 +15,7 @@ jobs:
       env:
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       before_install:
+        - eval "${MATRIX_EVAL}"
         # conan installation
         - pyenv global $(pyenv whence 2to3)
         - python3 -m pip install --user --upgrade conan

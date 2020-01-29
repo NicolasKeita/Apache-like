@@ -6,15 +6,12 @@ jobs:
     - os: linux
       dist: bionic # Ubuntu version 18.04.3 LTS
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ppa:ubuntu-toolchain-r-test
-          packages:
-            - g++-9
       env:
         #- MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       before_install:
+        - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        - sudo apt-get -q update
+        - sudo apt-get -y install gcc-9
         #- eval "${MATRIX_EVAL}"
         # conan installation
         - pyenv global $(pyenv whence 2to3)

@@ -11,9 +11,9 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-9.2
+            - g++-9.2.0
       env:
-        - MATRIX_EVAL="CC=gcc-9.2 && CXX=g++-9.2"
+        - MATRIX_EVAL="CC=gcc-9.2.0 && CXX=g++-9.2.0"
       before_install:
         # conan installation
         - pyenv global $(pyenv whence 2to3)

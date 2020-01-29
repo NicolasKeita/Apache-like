@@ -6,6 +6,14 @@ jobs:
     - os: linux
       dist: bionic # Ubuntu version 18.04.3 LTS
       compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-9.2
+      env:
+        - MATRIX_EVAL="CC=gcc-9.2 && CXX=g++-9.2"
       before_install:
         # conan installation
         - pyenv global $(pyenv whence 2to3)

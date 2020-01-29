@@ -3,3 +3,8 @@
 */
 
 #include "Server.hpp"
+
+zia::Server::Server(short int port)
+{
+    this->turnOn(port, handleRequest);
+}

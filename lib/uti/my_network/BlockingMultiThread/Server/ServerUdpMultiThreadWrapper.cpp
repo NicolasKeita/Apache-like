@@ -9,7 +9,7 @@
 #include <thread>
 #include "ServerUdpMultiThreadWrapper.hpp"
 
-using boost::asio::ip::udp;
+//using boost::asio::ip::udp;
 
 uti::network::ServerUdpMultiThreadWrapper::ServerUdpMultiThreadWrapper()
         : _handleMessageReceived { nullptr },

@@ -6,12 +6,14 @@
 
 #include <string>
 #include "my_network/BlockingMultiThread/Server/ServerUdpMultiThreadWrapper.hpp"
+#include "ProtocolHandler.hpp"
 
 namespace zia {
     class Server : uti::network::ServerUdpMultiThreadWrapper {
     public:
         explicit Server(short int port);
-        static std::string handleRequest(const std::string &) {return "";};
+    private:
+        ProtocolHandler protocol;
     };
 }
 

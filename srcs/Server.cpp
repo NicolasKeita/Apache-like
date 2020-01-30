@@ -6,5 +6,5 @@
 
 zia::Server::Server(short int port)
 {
-    this->turnOn(port, handleRequest);
+    this->turnOn(port, &zia::ProtocolHandler::handleRequest);
 }

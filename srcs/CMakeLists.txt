@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD		    20)
 add_executable(${BINARY}
         main.cpp
         Server.cpp
+        ProtocolHandler.cpp
         )
 
 target_include_directories(${BINARY} PRIVATE

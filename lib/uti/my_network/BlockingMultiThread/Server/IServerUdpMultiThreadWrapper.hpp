@@ -11,8 +11,7 @@
 namespace uti::network {
     class IServerUdpMultiThreadWrapper {
         public:
-            virtual void turnOn(unsigned short port,
-                                std::string (*handleMessageReceived)(const std::string &)) = 0;
+//            virtual void turnOn(unsigned short port, std::string (*handleMessageReceived)(const std::string &)) = 0;
             virtual void sendMessageToTheLastestClient(const std::string &message) = 0;
     };
 }

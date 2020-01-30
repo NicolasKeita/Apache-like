@@ -67,7 +67,7 @@ namespace uti::network {
             template<class T>
             T getReply()
             {
-                using boost::asio::ip::udp;
+                //using boost::asio::ip::udp;
 
                 // Receive the header
                 _socket->receive(boost::asio::buffer(inbound_header));

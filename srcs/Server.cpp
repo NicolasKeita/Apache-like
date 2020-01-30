@@ -3,8 +3,9 @@
 */
 
 #include "Server.hpp"
+#include "ProtocolDataPacket.hpp"
 
-zia::Server::Server(short int port)
+zia::Server::Server(short int portToOpen)
 {
-    this->turnOn(port, &zia::ProtocolHandler::handleRequest);
+    this->turnOn<ProtocolDataPacket>(portToOpen, zia::ProtocolHandler::handleRequest);
 }

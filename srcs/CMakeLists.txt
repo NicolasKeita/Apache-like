@@ -17,7 +17,6 @@ target_include_directories(${BINARY} PRIVATE
 target_link_directories(${BINARY} PRIVATE
         )
 
-find_package(Boost 1.71.0 COMPONENTS serialization)
 target_link_libraries(${BINARY} PRIVATE
         my_network
         ${CONAN_LIBS_BOOST}

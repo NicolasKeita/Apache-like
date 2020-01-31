@@ -32,11 +32,13 @@ namespace uti::network {
 
             while (true) {
                 std::array<int8_t, 1024> data = {0};
-                //std::pair<T, udp::endpoint> r = this->getReply<T>();
+                std::pair<T, udp::endpoint> rr = this->getReply<T>();
 
                 T o;
                 udp::endpoint e;
+
                 std::pair<T, udp::endpoint> r(o, e);
+
                 //size_t length = _socket->receive_from(boost::asio::buffer(data), sender_endpoint);
 
                 std::thread thread_obj(&uti::network::ServerUdpMultiThreadWrapper::_handleRequest<T>,
@@ -53,12 +55,9 @@ namespace uti::network {
         }
 
 
-        /*
         template<class T>
         std::pair<T, boost::asio::ip::udp::endpoint> getReply()
         {
-            //using boost::asio::ip::udp;
-
             // Receive the header
             boost::asio::ip::udp::endpoint clientEndpoint;
             _socket->receive_from(boost::asio::buffer(_inbound_header), clientEndpoint);
@@ -94,7 +93,7 @@ namespace uti::network {
                 exit(34);
             }
             return std::pair(t, clientEndpoint);
-        };*/
+        };
 
 
         void sendMessageToTheLastestClient(const std::string &message) override;

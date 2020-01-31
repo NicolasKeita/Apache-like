@@ -48,10 +48,12 @@ void uti::network::ServerUdpMultiThreadWrapper::turnOn(unsigned short port,
 }
 */
 
+/*
 void uti::network::ServerUdpMultiThreadWrapper::sendMessageToTheLastestClient(const std::string &message)
 {
     (void)message;
 }
+*/
 
 /*
 void uti::network::ServerUdpMultiThreadWrapper::_handleRequest(udp::endpoint &  sender_endpoint,

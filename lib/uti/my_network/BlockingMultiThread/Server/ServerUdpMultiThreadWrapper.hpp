@@ -18,7 +18,7 @@
 #include "IServerUdpMultiThreadWrapper.hpp"
 
 namespace uti::network {
-    class ServerUdpMultiThreadWrapper : public IServerUdpMultiThreadWrapper {
+    class ServerUdpMultiThreadWrapper {
     public:
         ServerUdpMultiThreadWrapper();
 
@@ -96,7 +96,7 @@ namespace uti::network {
         };
 
 
-        void sendMessageToTheLastestClient(const std::string &message) override;
+//        void sendMessageToTheLastestClient(const std::string &message) override;
 
     private:
         boost::asio::io_context _io_context;

@@ -5,12 +5,15 @@ if(NOT CMAKE_COMPILER_IS_GNUCXX)
     return()
 endif(NOT CMAKE_COMPILER_IS_GNUCXX)
 
-#find_package(Boost 1.69.0 REQUIRED)
+find_package(Boost 1.71.0 REQUIRED)
 find_package(Threads)
 find_program(BASH_PROGRAM bash)
 
+include_directories(SYSTEM
+        ${Boost_INCLUDE_DIRS}
+        )
+
 include_directories(
-        ${BOOST_INCLUDE_DIRS}
         ./
         ../BlockingMultiThread
         ../Async)

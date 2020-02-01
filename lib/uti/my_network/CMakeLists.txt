@@ -15,8 +15,11 @@ endif(CONAN_BOOST_ROOT)
 if (DEFINED ENV{BOOST_ROOT})
     set(Boost_NO_SYSTEM_PATHS TRUE)
     set(Boost_ROOT $ENV{BOOST_ROOT})
+    set(BOOST_ROOT $ENV{BOOST_ROOT})
     set(Boost_INCLUDE_DIRS "${BOOST_ROOT}/include")
+    set(BOOST_INCLUDE_DIRS "${BOOST_ROOT}/include")
     set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib")
+    set(BOOST_LIBRARY_DIRS "${BOOST_ROOT}/lib")
 endif()
 
 find_package(Boost 1.71.0 COMPONENTS serialization REQUIRED)
@@ -31,6 +34,7 @@ add_library(${BINARY} STATIC
 
 target_include_directories(${BINARY} SYSTEM PUBLIC
         ${Boost_INCLUDE_DIRS}
+        ${BOOST_INCLUDE_DIRS}
         )
 
 target_include_directories(${BINARY} PUBLIC

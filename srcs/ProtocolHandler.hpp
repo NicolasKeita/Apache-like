@@ -8,7 +8,7 @@
 namespace zia {
     class ProtocolHandler {
     public:
-        static std::string handleRequest(const std::string & incomingRequest) {return "";};
+        static std::string handleRequest(const std::string & incomingRequest) {(void)incomingRequest; return "";};
     };
 }
 

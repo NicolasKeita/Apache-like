@@ -23,7 +23,7 @@ namespace uti::network {
         ServerUdpMultiThreadWrapper();
 
         template<class T>
-        void turnOn(unsigned short port, std::string (*handleMessageReceived)(const std::string &))
+        void turnOn(unsigned short int port, std::string (*handleMessageReceived)(const std::string &))
         {
             _handleMessageReceived = handleMessageReceived;
             using boost::asio::ip::udp;
@@ -31,7 +31,7 @@ namespace uti::network {
             _online = true;
 
             while (true) {
-                std::array<int8_t, 1024> data = {0};
+                //std::array<int8_t, 1024> data = {0};
                 std::pair<T, udp::endpoint> rr = this->getReply<T>();
 
                 T o;
@@ -110,7 +110,9 @@ namespace uti::network {
 
     private:
         template<class T>
-        void _handleRequest(boost::asio::ip::udp::endpoint sender_endpoint, T data) {
+        void _handleRequest(boost::asio::ip::udp::endpoint sender_endpoint, T data)
+        {
+            (void)data;
 
             //T serverReplyToClient = _handleMessageReceived(data); TODO(nicolas)
             std::string serverReplyToClient2 = "TODO(nicolas) change";

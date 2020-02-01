@@ -11,7 +11,7 @@
 namespace zia {
     class Server : uti::network::ServerUdpMultiThreadWrapper {
     public:
-        explicit Server(short int portToOpen);
+        explicit Server(unsigned short int portToOpen);
     private:
         ProtocolHandler protocol;
     };

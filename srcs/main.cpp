@@ -5,14 +5,12 @@
 #include "my_prog_args/MyProgArgs.hpp"
 #include "Server.hpp"
 
-short int extractPortNumberFromArgs(const std::string & argument1)
+unsigned short int extractPortNumberFromArgs(const std::string & argument1)
 {
-    short int port;
+    unsigned short int port;
     try
     {
-        port = static_cast<short int>(std::stoi(argument1));
-        if (port < 1)
-            throw std::invalid_argument("[ZIA] Ports cannot be negative");
+        port = static_cast<unsigned short int>(std::stoi(argument1));
     }
     catch (std::invalid_argument &e)
     {
@@ -27,7 +25,7 @@ int main(int argc, char *argv[], char **env)
 {
     uti::MyProgArgs args(argc, argv, env, 1);
 
-    short int port = extractPortNumberFromArgs(args.getArgs().at(1));
+    unsigned short int port = extractPortNumberFromArgs(args.getArgs().at(1));
     zia::Server server(port);
     return 0;
 }

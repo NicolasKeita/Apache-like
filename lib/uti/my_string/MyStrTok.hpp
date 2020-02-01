@@ -29,8 +29,9 @@ namespace uti {
 
         while (itEndToken != str.end()) {
             std::size_t indexBeginToken =
-                    str.find_first_not_of(delims, itEndToken - str.begin());
-            itBeginToken = str.begin() + indexBeginToken;
+                    str.find_first_not_of(delims,
+                                          static_cast<unsigned long>(itEndToken - str.begin()));
+            itBeginToken = str.begin() + static_cast<long>(indexBeginToken);
             if (itBeginToken == str.end() || indexBeginToken == std::string::npos)
                 break;
             itEndToken = std::find_first_of(itBeginToken, str.end(),

@@ -93,7 +93,7 @@ namespace uti::network {
                 exit(34);
             }
             return std::pair(t, clientEndpoint);
-        };
+        }
 
 
 //        void sendMessageToTheLastestClient(const std::string &message) override;

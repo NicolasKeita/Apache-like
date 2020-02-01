@@ -83,7 +83,7 @@ void uti::network::ServerTcpAsyncWrapper::TcpConnection::handleRead(const boost:
             break;
         }
     }
-    messageReceived = std::string(messageReceived.begin(), messageReceived.begin() + i);
+    messageReceived = std::string(messageReceived.begin(), messageReceived.begin() + static_cast<long>(i));
     while (messageReceived.back() == '\n') {
         messageReceived.pop_back();
     }

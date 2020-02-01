@@ -17,6 +17,7 @@ namespace uti::network {
             // template<class T> void sendMessage(const T & message) Templates cannot appear in interfaces
             // template<class T> T getReply() Templates cannot appear in interfaces
             virtual void stop() = 0;
+            virtual ~IClientUdpMultiThreadWrapper() = default;
     };
 }
 

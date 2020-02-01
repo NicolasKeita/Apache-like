@@ -12,11 +12,11 @@
 //using boost::asio::ip::udp;
 
 uti::network::ServerUdpMultiThreadWrapper::ServerUdpMultiThreadWrapper()
-        : _handleMessageReceived { nullptr },
-          _online { false },
+        : _online { false },
           _inbound_header {},
           _header_length { 8 },
-          _inbound_data {}
+          _inbound_data {},
+          _handleMessageReceived { nullptr }
 {}
 
 /*

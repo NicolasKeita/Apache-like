@@ -24,6 +24,7 @@ namespace uti::network {
                                        unsigned int port,
                                        std::string (*handleMessageReceived)(const std::string &)) = 0;
             virtual void sendMessage(const std::string &message) = 0;
+            virtual ~IClientTcpAsyncWrapper() = default;
     };
 }
 

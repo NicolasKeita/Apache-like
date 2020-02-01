@@ -20,6 +20,7 @@ namespace uti::network {
                                 std::string (*handleMessageReceived)(const std::string &),
                                 const std::string &welcomeMessage) = 0;
             virtual void sendMessageToTheLastestClient(const std::string &message) = 0;
+            virtual ~IServerTcpAsyncWrapper() = default;
     };
 }
 

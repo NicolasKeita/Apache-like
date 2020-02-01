@@ -102,7 +102,7 @@ namespace uti::network {
                     exit(34);
                 }
                 return t;
-            };
+            }
 
             void stop() override;
 

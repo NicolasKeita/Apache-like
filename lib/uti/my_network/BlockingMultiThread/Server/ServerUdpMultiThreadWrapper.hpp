@@ -32,7 +32,7 @@ namespace uti::network {
 
             while (true) {
                 //std::array<int8_t, 1024> data = {0};
-                std::pair<T, udp::endpoint> rr = this->getReply<T>();
+                std::pair<T, udp::endpoint> clientMessage = this->getIncomingClientMessage<T>();
 
                 T o;
                 udp::endpoint e;
@@ -56,7 +56,7 @@ namespace uti::network {
 
 
         template<class T>
-        std::pair<T, boost::asio::ip::udp::endpoint> getReply()
+        std::pair<T, boost::asio::ip::udp::endpoint> getIncomingClientMessage()
         {
             // Receive the header
             boost::asio::ip::udp::endpoint clientEndpoint;
@@ -110,7 +110,7 @@ namespace uti::network {
 
     private:
         template<class T>
-        void _handleRequest(boost::asio::ip::udp::endpoint sender_endpoint, T data)
+        void _handleRequest(const boost::asio::ip::udp::endpoint sender_endpoint, T data)
         {
             (void)data;
 

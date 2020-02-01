@@ -9,9 +9,13 @@
 #include "ProtocolHandler.hpp"
 
 namespace zia {
-    class Server : uti::network::ServerUdpMultiThreadWrapper {
+    template<class ProtocolDataPacket>
+    class Server : uti::network::ServerUdpMultiThreadWrapper<ProtocolDataPacket> {
     public:
-        explicit Server(unsigned short int portToOpen);
+        explicit Server(unsigned short int portToOpen)
+        {
+            this->turnOn(portToOpen, zia::ProtocolHandler::handleRequest);
+        }
     private:
         ProtocolHandler protocol;
     };

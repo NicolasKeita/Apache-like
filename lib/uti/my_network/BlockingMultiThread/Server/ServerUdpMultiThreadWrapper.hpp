@@ -18,12 +18,19 @@
 #include "IServerUdpMultiThreadWrapper.hpp"
 
 namespace uti::network {
+    template<class ProtocolDataPacket>
     class ServerUdpMultiThreadWrapper {
     public:
-        ServerUdpMultiThreadWrapper();
+        ServerUdpMultiThreadWrapper()
+                : _online { false },
+                  _inbound_header {},
+                  _header_length { 8 },
+                  _inbound_data {},
+                  _handleMessageReceived { nullptr }
+        {}
 
-        template<class T>
-        void turnOn(unsigned short int port, std::string (*handleMessageReceived)(const std::string &))
+
+        void turnOn(unsigned short int port, ProtocolDataPacket (*handleMessageReceived)(const ProtocolDataPacket &))
         {
             _handleMessageReceived = handleMessageReceived;
             using boost::asio::ip::udp;
@@ -32,20 +39,22 @@ namespace uti::network {
 
             while (true) {
                 //std::array<int8_t, 1024> data = {0};
-                std::pair<T, udp::endpoint> clientMessage = this->getIncomingClientMessage<T>();
+                std::pair<ProtocolDataPacket, udp::endpoint> clientMessage = this->getIncomingClientMessage();
 
+                /*
                 T o;
                 udp::endpoint e;
 
                 std::pair<T, udp::endpoint> r(o, e);
+                 */
 
                 //size_t length = _socket->receive_from(boost::asio::buffer(data), sender_endpoint);
 
-                std::thread thread_obj(&uti::network::ServerUdpMultiThreadWrapper::_handleRequest<T>,
+                std::thread thread_obj(&uti::network::ServerUdpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
                                        this,
                         //sender_endpoint,
-                                       r.second,
-                                       r.first);
+                                       std::ref(clientMessage.second),
+                                       clientMessage.first);
                 //data,
                 //length);
                 thread_obj.detach();
@@ -55,8 +64,7 @@ namespace uti::network {
         }
 
 
-        template<class T>
-        std::pair<T, boost::asio::ip::udp::endpoint> getIncomingClientMessage()
+        std::pair<ProtocolDataPacket, boost::asio::ip::udp::endpoint> getIncomingClientMessage()
         {
             // Receive the header
             boost::asio::ip::udp::endpoint clientEndpoint;
@@ -80,7 +88,7 @@ namespace uti::network {
 
             _socket->receive(boost::asio::buffer(_inbound_data));
 
-            T t;
+            ProtocolDataPacket t;
             try {
                 std::string archive_data(&_inbound_data[0], _inbound_data.size());
                 std::istringstream archive_stream(archive_data);
@@ -106,16 +114,17 @@ namespace uti::network {
         size_t _header_length;
         std::vector<char> _inbound_data;
 
-        std::string (*_handleMessageReceived)(const std::string &);
+        ProtocolDataPacket (*_handleMessageReceived)(const ProtocolDataPacket &);
 
     private:
-        template<class T>
-        void _handleRequest(const boost::asio::ip::udp::endpoint sender_endpoint, T data)
+        void _handleRequest(const boost::asio::ip::udp::endpoint &sender_endpoint, ProtocolDataPacket data)
         {
-            (void)data;
+            //(void)data;
 
-            //T serverReplyToClient = _handleMessageReceived(data); TODO(nicolas)
+            ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
+
             std::string serverReplyToClient2 = "TODO(nicolas) change";
+
             _socket->send_to(boost::asio::buffer(serverReplyToClient2,
                                                  serverReplyToClient2.size()),
                              sender_endpoint);

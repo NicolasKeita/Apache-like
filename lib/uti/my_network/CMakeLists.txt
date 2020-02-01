@@ -25,8 +25,9 @@ find_package(Threads REQUIRED)
 add_library(${BINARY} STATIC
         Async/ServerTcpAsyncWrapper.cpp
         Async/ClientTcpAsyncWrapper.cpp
-        BlockingMultiThread/Server/ServerUdpMultiThreadWrapper.cpp
-        BlockingMultiThread/Client/ClientUdpMultiThreadWrapper.cpp)
+        #BlockingMultiThread/Server/ServerUdpMultiThreadWrapper.cpp
+        BlockingMultiThread/Client/ClientUdpMultiThreadWrapper.cpp
+        )
 
 target_include_directories(${BINARY} SYSTEM PUBLIC
         ${Boost_INCLUDE_DIRS}

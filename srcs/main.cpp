@@ -4,6 +4,7 @@
 
 #include "my_prog_args/MyProgArgs.hpp"
 #include "Server.hpp"
+#include "ProtocolDataPacket.hpp"
 
 unsigned short int extractPortNumberFromArgs(const std::string & argument1)
 {
@@ -26,6 +27,6 @@ int main(int argc, char *argv[], char **env)
     uti::MyProgArgs args(argc, argv, env, 1);
 
     unsigned short int port = extractPortNumberFromArgs(args.getArgs().at(1));
-    zia::Server server(port);
+    zia::Server<zia::ProtocolDataPacket> server(port);
     return 0;
 }

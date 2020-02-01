@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD		    20)
 
 add_executable(${BINARY}
         main.cpp
-        Server.cpp
+        #Server.cpp
         ProtocolHandler.cpp
         )
 

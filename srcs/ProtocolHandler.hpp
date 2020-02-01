@@ -4,11 +4,13 @@
 
 #pragma once
 #include <string>
+#include "ProtocolDataPacket.hpp"
 
 namespace zia {
     class ProtocolHandler {
     public:
-        static std::string handleRequest(const std::string & incomingRequest) {(void)incomingRequest; return "";};
+        //static std::string handleRequest(const std::string & incomingRequest) {(void)incomingRequest; return "";};
+        static ProtocolDataPacket handleRequest(const ProtocolDataPacket & incomingRequest) {(void)incomingRequest; return ProtocolDataPacket();}
     };
 }
 

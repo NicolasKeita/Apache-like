@@ -5,7 +5,8 @@
 #include "Server.hpp"
 #include "ProtocolDataPacket.hpp"
 
+/*
 zia::Server::Server(short unsigned int portToOpen)
 {
     this->turnOn<ProtocolDataPacket>(portToOpen, zia::ProtocolHandler::handleRequest);
-}
+}*/

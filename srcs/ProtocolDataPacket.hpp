@@ -5,13 +5,15 @@
 #pragma once
 #include <string>
 
-struct ProtocolDataPacket {
-    std::string message;
+namespace zia {
+    struct ProtocolDataPacket {
+        std::string message;
 
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int version)
-    {
-        (void)version;
-        ar & message;
-    }
-};
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version)
+        {
+            (void) version;
+            ar & message;
+        }
+    };
+}

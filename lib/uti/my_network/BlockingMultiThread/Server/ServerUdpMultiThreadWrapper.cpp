@@ -11,6 +11,7 @@
 
 //using boost::asio::ip::udp;
 
+/*
 uti::network::ServerUdpMultiThreadWrapper::ServerUdpMultiThreadWrapper()
         : _online { false },
           _inbound_header {},
@@ -18,6 +19,7 @@ uti::network::ServerUdpMultiThreadWrapper::ServerUdpMultiThreadWrapper()
           _inbound_data {},
           _handleMessageReceived { nullptr }
 {}
+ */
 
 /*
 template<class T>

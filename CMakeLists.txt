@@ -8,7 +8,7 @@ else()
     message(FATAL_ERROR "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
 endif()
 
-find_package(Boost 1.69.0 COMPONENTS serialization)
+find_package(Boost 1.71.0 COMPONENTS serialization)
 
 add_subdirectory("${CMAKE_HOME_DIRECTORY}/lib/libmy_parsers/")
 add_subdirectory("${CMAKE_HOME_DIRECTORY}/lib/uti/my_network/")

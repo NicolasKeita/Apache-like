@@ -125,8 +125,14 @@ namespace uti::network {
 
             std::string serverReplyToClient2 = "TODO(nicolas) change";
 
-            _socket->send_to(boost::asio::buffer(serverReplyToClient2,
-                                                 serverReplyToClient2.size()),
+            _socket->send_to(boost::asio::buffer(
+                    /*
+                    serverReplyToClient), TODO (nicolas) Need to serialize this before sending it
+                     */
+
+                    serverReplyToClient2,
+                    serverReplyToClient2.size()),
+
                              sender_endpoint);
         }
     };

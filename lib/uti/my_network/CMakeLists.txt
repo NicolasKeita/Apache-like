@@ -19,7 +19,7 @@ if (DEFINED ENV{BOOST_ROOT})
     set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib")
 endif()
 
-find_package(Boost 1.69.0 COMPONENTS serialization REQUIRED)
+find_package(Boost 1.71.0 COMPONENTS serialization REQUIRED)
 find_package(Threads REQUIRED)
 
 add_library(${BINARY} STATIC

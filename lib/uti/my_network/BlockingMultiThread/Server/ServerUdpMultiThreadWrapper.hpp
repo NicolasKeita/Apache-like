@@ -122,18 +122,51 @@ namespace uti::network {
             //(void)data;
 
             ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
+            sendMessage(serverReplyToClient, sender_endpoint);
+            /*
 
             std::string serverReplyToClient2 = "TODO(nicolas) change";
 
             _socket->send_to(boost::asio::buffer(
-                    /*
                     serverReplyToClient), TODO (nicolas) Need to serialize this before sending it
-                     */
 
                     serverReplyToClient2,
                     serverReplyToClient2.size()),
 
                              sender_endpoint);
+            */
         }
+
+        void sendMessage(const ProtocolDataPacket & message, const boost::asio::ip::udp::endpoint &sender_endpoint)
+        {
+            // Serialization
+            std::ostringstream archive_stream;
+            boost::archive::text_oarchive archive(archive_stream);
+            archive << message;
+            std::string message_serialized = archive_stream.str();
+
+            // Header creation
+            std::ostringstream  header_stream;
+            header_stream << std::setw(static_cast<int>(_header_length)) \
+                << std::hex << message_serialized.size();
+            if (!header_stream || header_stream.str().size() != _header_length) {
+                std::cerr << "[CLientUdpMultiThread] Serialization Object went wrong" << std::endl;
+                exit(84);
+            }
+            std::string header = header_stream.str();
+
+            // Merge
+            std::vector<boost::asio::const_buffer> buffers;
+            buffers.emplace_back(boost::asio::buffer(header));
+            buffers.emplace_back(boost::asio::buffer(message_serialized));
+
+            // Sending a long serialized message
+            //_socket->send_to(boost::asio::buffer(header), *_endpoints.begin());
+            _socket->send_to(boost::asio::buffer(header), sender_endpoint);
+            //_socket->send_to(boost::asio::buffer(message_serialized), *_endpoints.begin());
+            _socket->send_to(boost::asio::buffer(message_serialized), sender_endpoint);
+            //_socket->send_to(buffers, *_endpoints.begin()); // TODO : send it only once (merge header + message)
+        }
+
     };
 }

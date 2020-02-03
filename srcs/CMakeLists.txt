@@ -10,6 +10,16 @@ add_executable(${BINARY}
         ProtocolHandler.cpp
         )
 
+if (MSVC)
+    #target_include_directories(${BINARY} SYSTEM PUBLIC
+    #        ${BOOST_INCLUDE_DIRS}
+    #        )
+else()
+    target_include_directories(${BINARY} SYSTEM PUBLIC
+            ${Boost_INCLUDE_DIRS}
+            )
+endif()
+
 target_include_directories(${BINARY} PRIVATE
         ${CMAKE_HOME_DIRECTORY}/lib/uti/
         )

@@ -7,7 +7,6 @@
 
 #pragma once
 #include <memory>
-#include <list>
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/serialization/vector.hpp>
@@ -16,22 +15,13 @@
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
-
-#include <array>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include <boost/noncopyable.hpp>
-#include <boost/asio/buffer.hpp>
-#include <boost/format.hpp>
+#include "IServerUdpMultiThreadWrapper.hpp"
 
 namespace uti::network {
     template<class ProtocolDataPacket>
-    class ServerTcpMultiThreadWrapper {
+    class ServerUdpMultiThreadWrapper {
     public:
-        ServerTcpMultiThreadWrapper()
+        ServerUdpMultiThreadWrapper()
                 : _online { false },
                   _inbound_header {},
                   _header_length { 8 },
@@ -43,37 +33,28 @@ namespace uti::network {
         void turnOn(unsigned short int port, ProtocolDataPacket (*handleMessageReceived)(const ProtocolDataPacket &))
         {
             _handleMessageReceived = handleMessageReceived;
-            using boost::asio::ip::tcp;
-            //_socket = std::make_unique<tcp::socket>(_io_context, tcp::endpoint(tcp::v4(), port));
-            _socket = std::make_unique<tcp::socket>(_io_context);
-            _sockets.push_back(tcp::socket(_io_context));
-            _acceptor = std::make_unique<tcp::acceptor>(_io_context, tcp::endpoint(tcp::v4(), port));
+            using boost::asio::ip::udp;
+            _socket = std::make_unique<udp::socket>(_io_context, udp::endpoint(udp::v4(), port));
             _online = true;
 
             while (true) {
-                _acceptor->accept(_sockets.back());
-                std::cerr << "ACCEPT COMPLETED ! : " << std::endl;
-//                boost::array<char, 8192>    buffer2 {};
-//                _sockets.back().read_some(boost::asio::buffer(buffer2));
-//                std::cerr << "GOT A MESSAGE ! : " << std::endl;
-
                 //std::array<int8_t, 1024> data = {0};
-                const ProtocolDataPacket clientMessage = this->getIncomingClientMessage(_sockets.back());
+                std::pair<ProtocolDataPacket, udp::endpoint> clientMessage = this->getIncomingClientMessage();
                 std::cerr << "GOT A MESSAGE ! : " << std::endl;
                 /*
                 T o;
-                tcp::endpoint e;
+                udp::endpoint e;
 
-                std::pair<T, tcp::endpoint> r(o, e);
+                std::pair<T, udp::endpoint> r(o, e);
                  */
 
                 //size_t length = _socket->receive_from(boost::asio::buffer(data), sender_endpoint);
 
-                std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
+                std::thread thread_obj(&uti::network::ServerUdpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
                                        this,
                         //sender_endpoint,
-                                       std::ref(_sockets.back()),
-                                       std::ref(clientMessage));
+                                       std::ref(clientMessage.second),
+                                       clientMessage.first);
                 //data,
                 //length);
                 thread_obj.detach();
@@ -83,11 +64,11 @@ namespace uti::network {
         }
 
 
-        ProtocolDataPacket getIncomingClientMessage(boost::asio::ip::tcp::socket &socket)
+        std::pair<ProtocolDataPacket, boost::asio::ip::udp::endpoint> getIncomingClientMessage()
         {
             // Receive the header
-            boost::asio::ip::tcp::endpoint clientEndpoint;
-            socket.receive(boost::asio::buffer(_inbound_header));
+            boost::asio::ip::udp::endpoint clientEndpoint;
+            _socket->receive_from(boost::asio::buffer(_inbound_header), clientEndpoint);
 
             std::istringstream is(std::string(_inbound_header, _header_length));
             std::size_t inbound_data_size = 0;
@@ -119,7 +100,7 @@ namespace uti::network {
                 std::cerr << "[CLientUdpMultiThread] Unable to decode data.\n" << e.what() << std::endl;
                 exit(34);
             }
-            return t;
+            return std::pair(t, clientEndpoint);
         }
 
 
@@ -127,23 +108,21 @@ namespace uti::network {
 
     private:
         boost::asio::io_context _io_context;
-        std::unique_ptr<boost::asio::ip::tcp::socket> _socket;
-        std::list<boost::asio::ip::tcp::socket> _sockets;
-        std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
+        std::unique_ptr<boost::asio::ip::udp::socket> _socket;
         bool _online;
         char _inbound_header[8];
         size_t _header_length;
         std::vector<char> _inbound_data;
+
         ProtocolDataPacket (*_handleMessageReceived)(const ProtocolDataPacket &);
 
     private:
-        //void _handleRequest(const boost::asio::ip::tcp::endpoint &sender_endpoint, ProtocolDataPacket data)
-        void _handleRequest(boost::asio::ip::tcp::socket &socket, const ProtocolDataPacket &data)
+        void _handleRequest(const boost::asio::ip::udp::endpoint &sender_endpoint, ProtocolDataPacket data)
         {
             //(void)data;
 
-            const ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
-            sendMessage(socket, serverReplyToClient);
+            ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
+            sendMessage(serverReplyToClient, sender_endpoint);
             /*
 
             std::string serverReplyToClient2 = "TODO(nicolas) change";
@@ -158,7 +137,7 @@ namespace uti::network {
             */
         }
 
-        void sendMessage(boost::asio::ip::tcp::socket & socket, const ProtocolDataPacket & message)
+        void sendMessage(const ProtocolDataPacket & message, const boost::asio::ip::udp::endpoint &sender_endpoint)
         {
             // Serialization
             std::ostringstream archive_stream;
@@ -183,9 +162,9 @@ namespace uti::network {
 
             // Sending a long serialized message
             //_socket->send_to(boost::asio::buffer(header), *_endpoints.begin());
-            socket.send(boost::asio::buffer(header));
+            _socket->send_to(boost::asio::buffer(header), sender_endpoint);
             //_socket->send_to(boost::asio::buffer(message_serialized), *_endpoints.begin());
-            socket.send(boost::asio::buffer(message_serialized));
+            _socket->send_to(boost::asio::buffer(message_serialized), sender_endpoint);
             //_socket->send_to(buffers, *_endpoints.begin()); // TODO : send it only once (merge header + message)
         }
 

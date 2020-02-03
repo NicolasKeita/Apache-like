@@ -38,7 +38,6 @@ find_package(Threads REQUIRED)
 add_library(${BINARY} STATIC
         Async/ServerTcpAsyncWrapper.cpp
         Async/ClientTcpAsyncWrapper.cpp
-        #BlockingMultiThread/Server/ServerUdpMultiThreadWrapper.cpp
         BlockingMultiThread/Client/ClientUdpMultiThreadWrapper.cpp
         )
 

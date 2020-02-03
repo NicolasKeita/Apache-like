@@ -5,7 +5,7 @@
 #pragma once
 
 #include <string>
-#include "my_network/BlockingMultiThread/Server/ServerUdpMultiThreadWrapper.hpp"
+#include "my_network/BlockingMultiThread/Server/UDP/ServerUdpMultiThreadWrapper.hpp"
 #include "ProtocolHandler.hpp"
 
 namespace zia {

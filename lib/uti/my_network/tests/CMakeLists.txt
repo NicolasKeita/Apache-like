@@ -10,9 +10,9 @@ find_package(Threads)
 find_program(BASH_PROGRAM bash)
 
 if (MSVC)
-    include_directories(SYSTEM
-            ${BOOST_INCLUDE_DIRS}
-            )
+    #include_directories(SYSTEM
+    #        ${BOOST_INCLUDE_DIRS}
+     #       )
 else()
     include_directories(SYSTEM
             ${Boost_INCLUDE_DIRS}

@@ -10,7 +10,11 @@ namespace zia {
     class ProtocolHandler {
     public:
         //static std::string handleRequest(const std::string & incomingRequest) {(void)incomingRequest; return "";};
-        static ProtocolDataPacket handleRequest(const ProtocolDataPacket & incomingRequest) {(void)incomingRequest; return ProtocolDataPacket();}
+        static ProtocolDataPacket handleRequest(const ProtocolDataPacket & incomingRequest)
+        {
+            (void)incomingRequest;
+            return ProtocolDataPacket();
+        }
     };
 }
 

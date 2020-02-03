@@ -9,9 +9,15 @@ find_package(Boost 1.69.0 REQUIRED)
 find_package(Threads)
 find_program(BASH_PROGRAM bash)
 
-include_directories(SYSTEM
-        ${Boost_INCLUDE_DIRS}
-        )
+if (MSVC)
+    include_directories(SYSTEM
+            ${BOOST_INCLUDE_DIRS}
+            )
+else()
+    include_directories(SYSTEM
+            ${Boost_INCLUDE_DIRS}
+            )
+endif()
 
 include_directories(
         ./

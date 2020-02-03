@@ -40,7 +40,7 @@ namespace uti::network {
             while (true) {
                 //std::array<int8_t, 1024> data = {0};
                 std::pair<ProtocolDataPacket, udp::endpoint> clientMessage = this->getIncomingClientMessage();
-
+                std::cerr << "GOT A MESSAGE ! : " << std::endl;
                 /*
                 T o;
                 udp::endpoint e;

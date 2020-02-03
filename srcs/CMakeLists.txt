@@ -18,7 +18,7 @@ target_link_directories(${BINARY} PRIVATE
         )
 
 target_link_libraries(${BINARY} PRIVATE
-        my_network
+        #my_network
         ${CONAN_LIBS_BOOST}
         )
 

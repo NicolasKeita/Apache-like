@@ -5,12 +5,12 @@
 #pragma once
 
 #include <string>
-#include "my_network/BlockingMultiThread/Server/UDP/ServerUdpMultiThreadWrapper.hpp"
+#include "my_network/BlockingMultiThread/Server/TCP/ServerTcpMultiThreadWrapper.hpp"
 #include "ProtocolHandler.hpp"
 
 namespace zia {
     template<class ProtocolDataPacket>
-    class Server : uti::network::ServerUdpMultiThreadWrapper<ProtocolDataPacket> {
+    class Server : uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket> {
     public:
         explicit Server(unsigned short int portToOpen)
         {

@@ -19,10 +19,18 @@ else()
             )
 endif()
 
-include_directories(
-        ./
-        ../BlockingMultiThread
-        ../Async)
+if (MSVC)
+    include_directories(
+            ./
+            ${BOOST_INCLUDE_DIRS}
+            ../BlockingMultiThread
+            ../Async)
+else()
+    include_directories(
+            ./
+            ../BlockingMultiThread
+            ../Async)
+endif()
 
 add_executable(test_serv test_1_source_code/serv.cpp)
 add_executable(test_client test_1_source_code/client.cpp)

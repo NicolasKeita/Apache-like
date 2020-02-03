@@ -43,20 +43,33 @@ add_library(${BINARY} STATIC
         )
 
 if (MSVC)
-    target_include_directories(${BINARY} SYSTEM PUBLIC
-            ${BOOST_INCLUDE_DIRS}
-            )
+    #target_include_directories(${BINARY} SYSTEM PUBLIC
+    #        ${BOOST_INCLUDE_DIRS}
+    #        )
 else()
     target_include_directories(${BINARY} SYSTEM PUBLIC
             ${Boost_INCLUDE_DIRS}
             )
 endif()
 
-target_include_directories(${BINARY} PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ./../my_string/
-        Async
-        )
+if (MSVC)
+    target_include_directories(${BINARY} PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ./../my_string/
+            ${BOOST_INCLUDE_DIRS}
+            Async
+            ${CMAKE_CURRENT_SOURCE_DIR}/BlockingMultiThread
+            ${CMAKE_CURRENT_SOURCE_DIR}/BlockingMultiThread/Server
+            )
+else()
+    target_include_directories(${BINARY} PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ./../my_string/
+            Async
+            ${CMAKE_CURRENT_SOURCE_DIR}/BlockingMultiThread
+            ${CMAKE_CURRENT_SOURCE_DIR}/BlockingMultiThread/Server
+            )
+endif()
 
 target_link_libraries(${BINARY} ${CMAKE_THREAD_LIBS_INIT})
 

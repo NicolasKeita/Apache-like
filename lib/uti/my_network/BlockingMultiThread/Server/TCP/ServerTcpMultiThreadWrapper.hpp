@@ -15,13 +15,12 @@
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
-#include "IServerUdpMultiThreadWrapper.hpp"
 
 namespace uti::network {
     template<class ProtocolDataPacket>
-    class ServerUdpMultiThreadWrapper {
+    class ServerTcpMultiThreadWrapper {
     public:
-        ServerUdpMultiThreadWrapper()
+        ServerTcpMultiThreadWrapper()
                 : _online { false },
                   _inbound_header {},
                   _header_length { 8 },
@@ -50,7 +49,7 @@ namespace uti::network {
 
                 //size_t length = _socket->receive_from(boost::asio::buffer(data), sender_endpoint);
 
-                std::thread thread_obj(&uti::network::ServerUdpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
+                std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
                                        this,
                         //sender_endpoint,
                                        std::ref(clientMessage.second),

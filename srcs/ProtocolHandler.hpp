@@ -4,6 +4,7 @@
 
 #pragma once
 #include <string>
+#include <iostream>
 
 using ProtocolDataPacket = std::string;
 
@@ -14,6 +15,7 @@ namespace zia {
         static ProtocolDataPacket handleRequest(const ProtocolDataPacket & incomingRequest)
         {
             (void)incomingRequest;
+            std::cout << "VOILA LE MESSAGE RECU : " << incomingRequest << std::endl;
             return ProtocolDataPacket();
         }
     };

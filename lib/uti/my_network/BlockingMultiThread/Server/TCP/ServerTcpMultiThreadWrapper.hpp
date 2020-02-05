@@ -7,21 +7,18 @@
 
 #pragma once
 #include <memory>
+#include <array>
 #include <list>
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/string.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
-
-#include <array>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/asio/buffer.hpp>
@@ -59,10 +56,11 @@ namespace uti::network {
                                        this,
                                        std::ref(_sockets),
                                        std::ref(_sockets.back()), // TODO: should be fine to remove the extra param
-                                       std::ref(clientMessage));
+                                       clientMessage);
                 thread_obj.detach();
                 if (!_online)
                     break;
+                _sockets.push_back(tcp::socket(_io_context));
             }
         }
 
@@ -120,7 +118,6 @@ namespace uti::network {
 
     private:
         boost::asio::io_context                         _io_context;
-        //std::unique_ptr<boost::asio::ip::tcp::socket>   _socket;
         std::list<boost::asio::ip::tcp::socket>         _sockets;
         std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
         bool                _online;
@@ -132,25 +129,14 @@ namespace uti::network {
 
     private:
         //void _handleRequest(const boost::asio::ip::tcp::endpoint &sender_endpoint, ProtocolDataPacket data)
-        void _handleRequest(std::list<boost::asio::ip::tcp::socket> &sockets, boost::asio::ip::tcp::socket &socket, const ProtocolDataPacket &data)
+        void _handleRequest(std::list<boost::asio::ip::tcp::socket> &sockets, boost::asio::ip::tcp::socket &socket, const ProtocolDataPacket data)
         {
             //(void)data;
             (void)sockets;
 
             const ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
             sendMessage(socket, serverReplyToClient);
-            /*
-
-            std::string serverReplyToClient2 = "TODO(nicolas) change";
-
-            _socket->send_to(boost::asio::buffer(
-                    serverReplyToClient), TODO (nicolas) Need to serialize this before sending it
-
-                    serverReplyToClient2,
-                    serverReplyToClient2.size()),
-
-                             sender_endpoint);
-            */
+            socket.close();
         }
 
         void sendMessage(boost::asio::ip::tcp::socket & socket, const ProtocolDataPacket & message)

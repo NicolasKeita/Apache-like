@@ -28,15 +28,19 @@
 #include <boost/format.hpp>
 
 namespace uti::network {
+    enum ProtocolType {BINARY, TEXT};
     template<class ProtocolDataPacket>
     class ServerTcpMultiThreadWrapper {
     public:
-        ServerTcpMultiThreadWrapper()
+
+        // It is recommanded to choose Binary as protocol type if you have control over the client
+        explicit ServerTcpMultiThreadWrapper(ProtocolType protocolType)
                 : _online { false },
                   _inbound_header {},
                   _header_length { 8 },
                   _inbound_data {},
-                  _handleMessageReceived { nullptr }
+                  _handleMessageReceived { nullptr },
+                  _protocolType { protocolType }
         {}
 
 
@@ -44,38 +48,18 @@ namespace uti::network {
         {
             _handleMessageReceived = handleMessageReceived;
             using boost::asio::ip::tcp;
-            //_socket = std::make_unique<tcp::socket>(_io_context, tcp::endpoint(tcp::v4(), port));
-            _socket = std::make_unique<tcp::socket>(_io_context);
             _sockets.push_back(tcp::socket(_io_context));
             _acceptor = std::make_unique<tcp::acceptor>(_io_context, tcp::endpoint(tcp::v4(), port));
             _online = true;
 
             while (true) {
                 _acceptor->accept(_sockets.back());
-                std::cerr << "ACCEPT COMPLETED ! : " << std::endl;
-//                boost::array<char, 8192>    buffer2 {};
-//                _sockets.back().read_some(boost::asio::buffer(buffer2));
-//                std::cerr << "GOT A MESSAGE ! : " << std::endl;
-
-                //std::array<int8_t, 1024> data = {0};
                 const ProtocolDataPacket clientMessage = this->getIncomingClientMessage(_sockets.back());
-                std::cerr << "GOT A MESSAGE ! : " << std::endl;
-                /*
-                T o;
-                tcp::endpoint e;
-
-                std::pair<T, tcp::endpoint> r(o, e);
-                 */
-
-                //size_t length = _socket->receive_from(boost::asio::buffer(data), sender_endpoint);
-
                 std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
                                        this,
-                        //sender_endpoint,
-                                       std::ref(_sockets.back()),
+                                       std::ref(_sockets),
+                                       std::ref(_sockets.back()), // TODO: should be fine to remove the extra param
                                        std::ref(clientMessage));
-                //data,
-                //length);
                 thread_obj.detach();
                 if (!_online)
                     break;
@@ -85,62 +69,73 @@ namespace uti::network {
 
         ProtocolDataPacket getIncomingClientMessage(boost::asio::ip::tcp::socket &socket)
         {
-            // Receive the header
-            boost::asio::ip::tcp::endpoint clientEndpoint;
-            socket.receive(boost::asio::buffer(_inbound_header));
+            if (_protocolType == BINARY) {
+                // Receive the header
+                boost::asio::ip::tcp::endpoint clientEndpoint;
+                socket.receive(boost::asio::buffer(_inbound_header));
 
-            std::istringstream is(std::string(_inbound_header, _header_length));
-            std::size_t inbound_data_size = 0;
+                std::istringstream is(std::string(_inbound_header, _header_length));
+                std::size_t inbound_data_size = 0;
 
-            if (!(is >> std::hex >> inbound_data_size)) {
-                std::cerr << "[CLientUdpMultiThread] Header is not valid : " << std::dec << inbound_data_size << std::endl;
-                exit(31);
+                if (!(is >> std::hex >> inbound_data_size)) {
+                    std::cerr << "[CLientUdpMultiThread] Header is not valid : " << std::dec << inbound_data_size
+                              << std::endl;
+                    exit(31);
+                }
+                // Conversion hex to dec
+                std::stringstream stream;
+                size_t inbound_data_size_in_decimal = 0;
+
+                stream << inbound_data_size;
+                stream >> std::hex >> inbound_data_size_in_decimal;
+
+                _inbound_data.resize(inbound_data_size_in_decimal);
+
+                socket.receive(boost::asio::buffer(_inbound_data));
+
+                ProtocolDataPacket t;
+                try {
+                    std::string archive_data(&_inbound_data[0], _inbound_data.size());
+                    std::istringstream archive_stream(archive_data);
+                    boost::archive::text_iarchive archive(archive_stream);
+                    archive >> t;
+                }
+                catch (const std::exception &e) {
+                    std::cerr << "[CLientUdpMultiThread] Unable to decode data.\n" << e.what() << std::endl;
+                    exit(34);
+                }
+                return t;
             }
-            // Conversion hex to dec
-            std::stringstream   stream;
-            size_t              inbound_data_size_in_decimal = 0;
-
-            stream << inbound_data_size;
-            stream >> std::hex >> inbound_data_size_in_decimal;
-
-            _inbound_data.resize(inbound_data_size_in_decimal);
-
-            _socket->receive(boost::asio::buffer(_inbound_data));
-
-            ProtocolDataPacket t;
-            try {
-                std::string archive_data(&_inbound_data[0], _inbound_data.size());
-                std::istringstream archive_stream(archive_data);
-                boost::archive::text_iarchive archive(archive_stream);
-                archive >> t;
-            }
-            catch (const std::exception & e)
+            else // _protocolType == TEXT
             {
-                std::cerr << "[CLientUdpMultiThread] Unable to decode data.\n" << e.what() << std::endl;
-                exit(34);
+                boost::array<char, 8089> incomingData {};
+                socket.receive(boost::asio::buffer(incomingData));
+                std::string incomingDataCast(incomingData.begin(), incomingData.end());
+                return static_cast<ProtocolDataPacket>(incomingDataCast);
             }
-            return t;
         }
 
 
 //        void sendMessageToTheLastestClient(const std::string &message) override;
 
     private:
-        boost::asio::io_context _io_context;
-        std::unique_ptr<boost::asio::ip::tcp::socket> _socket;
-        std::list<boost::asio::ip::tcp::socket> _sockets;
+        boost::asio::io_context                         _io_context;
+        //std::unique_ptr<boost::asio::ip::tcp::socket>   _socket;
+        std::list<boost::asio::ip::tcp::socket>         _sockets;
         std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
-        bool _online;
-        char _inbound_header[8];
-        size_t _header_length;
-        std::vector<char> _inbound_data;
+        bool                _online;
+        char                _inbound_header[8];
+        size_t              _header_length;
+        std::vector<char>   _inbound_data;
         ProtocolDataPacket (*_handleMessageReceived)(const ProtocolDataPacket &);
+        ProtocolType        _protocolType;
 
     private:
         //void _handleRequest(const boost::asio::ip::tcp::endpoint &sender_endpoint, ProtocolDataPacket data)
-        void _handleRequest(boost::asio::ip::tcp::socket &socket, const ProtocolDataPacket &data)
+        void _handleRequest(std::list<boost::asio::ip::tcp::socket> &sockets, boost::asio::ip::tcp::socket &socket, const ProtocolDataPacket &data)
         {
             //(void)data;
+            (void)sockets;
 
             const ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
             sendMessage(socket, serverReplyToClient);
@@ -160,33 +155,39 @@ namespace uti::network {
 
         void sendMessage(boost::asio::ip::tcp::socket & socket, const ProtocolDataPacket & message)
         {
-            // Serialization
-            std::ostringstream archive_stream;
-            boost::archive::text_oarchive archive(archive_stream);
-            archive << message;
-            std::string message_serialized = archive_stream.str();
+            if (_protocolType == BINARY) {
+                // Serialization
+                std::ostringstream archive_stream;
+                boost::archive::text_oarchive archive(archive_stream);
+                archive << message;
+                std::string message_serialized = archive_stream.str();
 
-            // Header creation
-            std::ostringstream  header_stream;
-            header_stream << std::setw(static_cast<int>(_header_length)) \
-                << std::hex << message_serialized.size();
-            if (!header_stream || header_stream.str().size() != _header_length) {
-                std::cerr << "[CLientUdpMultiThread] Serialization Object went wrong" << std::endl;
-                exit(84);
+                // Header creation
+                std::ostringstream header_stream;
+                header_stream << std::setw(static_cast<int>(_header_length)) \
+ << std::hex << message_serialized.size();
+                if (!header_stream || header_stream.str().size() != _header_length) {
+                    std::cerr << "[CLientUdpMultiThread] Serialization Object went wrong" << std::endl;
+                    exit(84);
+                }
+                std::string header = header_stream.str();
+
+                // Merge
+                std::vector<boost::asio::const_buffer> buffers;
+                buffers.emplace_back(boost::asio::buffer(header));
+                buffers.emplace_back(boost::asio::buffer(message_serialized));
+
+                // Sending a long serialized message
+                //_socket->send_to(boost::asio::buffer(header), *_endpoints.begin());
+                socket.send(boost::asio::buffer(header));
+                //_socket->send_to(boost::asio::buffer(message_serialized), *_endpoints.begin());
+                socket.send(boost::asio::buffer(message_serialized));
+                //_socket->send_to(buffers, *_endpoints.begin()); // TODO : send it only once (merge header + message)
             }
-            std::string header = header_stream.str();
-
-            // Merge
-            std::vector<boost::asio::const_buffer> buffers;
-            buffers.emplace_back(boost::asio::buffer(header));
-            buffers.emplace_back(boost::asio::buffer(message_serialized));
-
-            // Sending a long serialized message
-            //_socket->send_to(boost::asio::buffer(header), *_endpoints.begin());
-            socket.send(boost::asio::buffer(header));
-            //_socket->send_to(boost::asio::buffer(message_serialized), *_endpoints.begin());
-            socket.send(boost::asio::buffer(message_serialized));
-            //_socket->send_to(buffers, *_endpoints.begin()); // TODO : send it only once (merge header + message)
+            else if (_protocolType == TEXT) {
+                auto messageCast = static_cast<std::string>(message);
+                socket.send(boost::asio::buffer(messageCast));
+            }
         }
 
     };

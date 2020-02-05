@@ -4,7 +4,8 @@
 
 #pragma once
 #include <string>
-#include "ProtocolDataPacket.hpp"
+
+using ProtocolDataPacket = std::string;
 
 namespace zia {
     class ProtocolHandler {

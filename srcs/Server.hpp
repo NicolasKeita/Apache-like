@@ -12,7 +12,8 @@ namespace zia {
     template<class ProtocolDataPacket>
     class Server : uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket> {
     public:
-        explicit Server(unsigned short int portToOpen)
+        explicit Server(const unsigned short int portToOpen, const uti::network::ProtocolType &protocolType)
+            : uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket> { protocolType }
         {
             this->turnOn(portToOpen, zia::ProtocolHandler::handleRequest);
         }

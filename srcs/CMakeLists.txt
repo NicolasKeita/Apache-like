@@ -1,24 +1,19 @@
 cmake_minimum_required(VERSION 3.14.5)
 project(My_Apache)
 
-set(BINARY zia)
-set(CMAKE_CXX_STANDARD		    20)
+set(BINARY              zia)
+set(CMAKE_CXX_STANDARD	20)
 
 add_executable(${BINARY}
         main.cpp
-        #Server.cpp
         ProtocolHandler.cpp
         )
 
-if (MSVC)
-    #target_include_directories(${BINARY} SYSTEM PUBLIC
-    #        ${BOOST_INCLUDE_DIRS}
-    #        )
-else()
-    target_include_directories(${BINARY} SYSTEM PUBLIC
-            ${Boost_INCLUDE_DIRS}
-            )
-endif()
+target_include_directories(${BINARY} SYSTEM PUBLIC
+        ${CONAN_INCLUDE_DIRS_BOOST}
+        )
+#        ${Boost_INCLUDE_DIRS}
+#        ${BOOST_INCLUDE_DIRS}
 
 target_include_directories(${BINARY} PRIVATE
         ${CMAKE_HOME_DIRECTORY}/lib/uti/

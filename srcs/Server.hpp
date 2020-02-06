@@ -13,12 +13,15 @@ namespace zia {
     class Server : uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket> {
     public:
         explicit Server(const unsigned short int portToOpen, const uti::network::ProtocolType &protocolType)
-            : uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket> { protocolType }
+            : uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket> { protocolType },
+              _pipeline { "./", "./"}
         {
-            this->turnOn(portToOpen, zia::ProtocolHandler::handleRequest);
+            //_pipeline.loadModules();
+            this->template turnOn<decltype(_protocolHandler)>(portToOpen, &zia::ProtocolHandler::onPacketReceived, _protocolHandler);
         }
     private:
-        ProtocolHandler protocol;
+        ProtocolHandler _protocolHandler;
+        oZ::Pipeline    _pipeline;
     };
 }
 

@@ -11,6 +11,7 @@ add_executable(${BINARY}
 
 target_include_directories(${BINARY} SYSTEM PUBLIC
         ${CONAN_INCLUDE_DIRS_BOOST}
+        ${CMAKE_HOME_DIRECTORY}/lib/openZia
         )
 #        ${Boost_INCLUDE_DIRS}
 #        ${BOOST_INCLUDE_DIRS}
@@ -23,7 +24,7 @@ target_link_directories(${BINARY} PRIVATE
         )
 
 target_link_libraries(${BINARY} PRIVATE
-        #my_network
+        openZia
         ${CONAN_LIBS_BOOST}
         )
 

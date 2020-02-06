@@ -10,6 +10,7 @@
 #include <array>
 #include <list>
 #include <iostream>
+#include <functional>
 #include <boost/asio.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/string.hpp>
@@ -36,13 +37,18 @@ namespace uti::network {
                   _inbound_header {},
                   _header_length { 8 },
                   _inbound_data {},
-                  _handleMessageReceived { nullptr },
+                 // _handleMessageReceived { nullptr },
                   _protocolType { protocolType }
         {}
 
-        void turnOn(unsigned short int port, ProtocolDataPacket (*handleMessageReceived)(const ProtocolDataPacket &))
+        template <class ProtocolHandlerPointer>
+        void turnOn(const unsigned short int port,
+//                    std::function<ProtocolDataPacket(const ProtocolDataPacket &)> handleMessageReceived,
+                    ProtocolDataPacket (ProtocolHandlerPointer::*onPacketReceived)(const ProtocolDataPacket &), // TODO: ask APE, how to replace this by std::function
+                    ProtocolHandlerPointer protocolHandler
+                    )
         {
-            _handleMessageReceived = handleMessageReceived;
+
             using boost::asio::ip::tcp;
             _sockets.push_back(tcp::socket(_io_context));
             _acceptor = std::make_unique<tcp::acceptor>(_io_context, tcp::endpoint(tcp::v4(), port));
@@ -51,11 +57,14 @@ namespace uti::network {
             while (true) {
                 _acceptor->accept(_sockets.back());
                 const ProtocolDataPacket clientMessage = this->getIncomingClientMessage(_sockets.back());
-                std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
+                std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest<ProtocolHandlerPointer>,
                                        this,
                                        std::ref(_sockets),
                                        std::ref(_sockets.back()), // TODO: remove this extra param
-                                       clientMessage);
+                                       clientMessage,
+                                       onPacketReceived,
+                                       protocolHandler
+                                       );
                 thread_obj.detach();
                 if (!_online)
                     break;
@@ -67,7 +76,7 @@ namespace uti::network {
         ProtocolDataPacket getIncomingClientMessage(boost::asio::ip::tcp::socket &socket)
         {
             if (_protocolType == BINARY) {
-                // Receive the header
+                /* Receive the header */
                 boost::asio::ip::tcp::endpoint clientEndpoint;
                 socket.receive(boost::asio::buffer(_inbound_header));
 
@@ -79,7 +88,7 @@ namespace uti::network {
                               << std::endl;
                     exit(31);
                 }
-                // Conversion hex to dec
+                /* Conversion hex to dec */
                 std::stringstream stream;
                 size_t inbound_data_size_in_decimal = 0;
 
@@ -113,11 +122,15 @@ namespace uti::network {
         }
 
     private:
+        template<class ProtocolHandlerPointer>
         void _handleRequest([[maybe_unused]] std::list<boost::asio::ip::tcp::socket> &sockets,
                             boost::asio::ip::tcp::socket &socket,
-                            const ProtocolDataPacket data)
+                            const ProtocolDataPacket data,
+                            ProtocolDataPacket (ProtocolHandlerPointer::*onPacketReceived)(const ProtocolDataPacket &), // TODO: ask APE, how to replace this by std::function
+                            ProtocolHandlerPointer protocolHandler)
         {
-            const ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
+            auto onPacketReceivedBinded = std::bind(onPacketReceived, protocolHandler, std::placeholders::_1);
+            const ProtocolDataPacket serverReplyToClient = onPacketReceivedBinded(data);
             _sendMessage(socket, serverReplyToClient);
             socket.close();
             // TODO remove the socket from the list of sockets after closing it.
@@ -166,7 +179,6 @@ namespace uti::network {
         char                _inbound_header[8];
         size_t              _header_length;
         std::vector<char>   _inbound_data;
-        ProtocolDataPacket (*_handleMessageReceived)(const ProtocolDataPacket &);
         ProtocolType        _protocolType;
 
     };

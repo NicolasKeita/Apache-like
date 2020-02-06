@@ -30,7 +30,7 @@ namespace uti::network {
     class ServerTcpMultiThreadWrapper {
     public:
 
-        // It is recommanded to choose Binary as protocol type if you have control over the client
+        // It is recommended to choose Binary as protocol type if you have control over the client
         explicit ServerTcpMultiThreadWrapper(ProtocolType protocolType)
                 : _online { false },
                   _inbound_header {},
@@ -39,7 +39,6 @@ namespace uti::network {
                   _handleMessageReceived { nullptr },
                   _protocolType { protocolType }
         {}
-
 
         void turnOn(unsigned short int port, ProtocolDataPacket (*handleMessageReceived)(const ProtocolDataPacket &))
         {
@@ -55,7 +54,7 @@ namespace uti::network {
                 std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
                                        this,
                                        std::ref(_sockets),
-                                       std::ref(_sockets.back()), // TODO: should be fine to remove the extra param
+                                       std::ref(_sockets.back()), // TODO: remove this extra param
                                        clientMessage);
                 thread_obj.detach();
                 if (!_online)
@@ -106,40 +105,25 @@ namespace uti::network {
             }
             else // _protocolType == TEXT
             {
-                boost::array<char, 8089> incomingData {};
+                boost::array<char, 8089> incomingData {}; // TODO fix: what if they send more than 8089 char at once?
                 socket.receive(boost::asio::buffer(incomingData));
                 std::string incomingDataCast(incomingData.begin(), incomingData.end());
                 return static_cast<ProtocolDataPacket>(incomingDataCast);
             }
         }
 
-
-//        void sendMessageToTheLastestClient(const std::string &message) override;
-
     private:
-        boost::asio::io_context                         _io_context;
-        std::list<boost::asio::ip::tcp::socket>         _sockets;
-        std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
-        bool                _online;
-        char                _inbound_header[8];
-        size_t              _header_length;
-        std::vector<char>   _inbound_data;
-        ProtocolDataPacket (*_handleMessageReceived)(const ProtocolDataPacket &);
-        ProtocolType        _protocolType;
-
-    private:
-        //void _handleRequest(const boost::asio::ip::tcp::endpoint &sender_endpoint, ProtocolDataPacket data)
-        void _handleRequest(std::list<boost::asio::ip::tcp::socket> &sockets, boost::asio::ip::tcp::socket &socket, const ProtocolDataPacket data)
+        void _handleRequest([[maybe_unused]] std::list<boost::asio::ip::tcp::socket> &sockets,
+                            boost::asio::ip::tcp::socket &socket,
+                            const ProtocolDataPacket data)
         {
-            //(void)data;
-            (void)sockets;
-
             const ProtocolDataPacket serverReplyToClient = _handleMessageReceived(data);
-            sendMessage(socket, serverReplyToClient);
+            _sendMessage(socket, serverReplyToClient);
             socket.close();
+            // TODO remove the socket from the list of sockets after closing it.
         }
 
-        void sendMessage(boost::asio::ip::tcp::socket & socket, const ProtocolDataPacket & message)
+        void _sendMessage(boost::asio::ip::tcp::socket & socket, const ProtocolDataPacket & message)
         {
             if (_protocolType == BINARY) {
                 // Serialization
@@ -164,9 +148,7 @@ namespace uti::network {
                 buffers.emplace_back(boost::asio::buffer(message_serialized));
 
                 // Sending a long serialized message
-                //_socket->send_to(boost::asio::buffer(header), *_endpoints.begin());
                 socket.send(boost::asio::buffer(header));
-                //_socket->send_to(boost::asio::buffer(message_serialized), *_endpoints.begin());
                 socket.send(boost::asio::buffer(message_serialized));
                 //_socket->send_to(buffers, *_endpoints.begin()); // TODO : send it only once (merge header + message)
             }
@@ -175,6 +157,17 @@ namespace uti::network {
                 socket.send(boost::asio::buffer(messageCast));
             }
         }
+
+    private:
+        boost::asio::io_context                         _io_context;
+        std::list<boost::asio::ip::tcp::socket>         _sockets;
+        std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
+        bool                _online;
+        char                _inbound_header[8];
+        size_t              _header_length;
+        std::vector<char>   _inbound_data;
+        ProtocolDataPacket (*_handleMessageReceived)(const ProtocolDataPacket &);
+        ProtocolType        _protocolType;
 
     };
 }

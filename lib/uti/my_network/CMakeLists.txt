@@ -48,7 +48,8 @@ if (MSVC)
     #        )
 else()
     target_include_directories(${BINARY} SYSTEM PUBLIC
-            ${Boost_INCLUDE_DIRS}
+            #${Boost_INCLUDE_DIRS}
+            ${CONAN_INCLUDE_DIRS_BOOST}
             )
 endif()
 

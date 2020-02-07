@@ -37,7 +37,6 @@ namespace uti::network {
                   _inbound_header {},
                   _header_length { 8 },
                   _inbound_data {},
-                 // _handleMessageReceived { nullptr },
                   _protocolType { protocolType }
         {}
 
@@ -77,7 +76,6 @@ namespace uti::network {
         {
             if (_protocolType == BINARY) {
                 /* Receive the header */
-                boost::asio::ip::tcp::endpoint clientEndpoint;
                 socket.receive(boost::asio::buffer(_inbound_header));
 
                 std::istringstream is(std::string(_inbound_header, _header_length));

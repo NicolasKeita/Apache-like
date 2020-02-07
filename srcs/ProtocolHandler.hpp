@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <openZia/Pipeline.hpp>
+#include <openZia/Context.hpp>
 #include <boost/serialization/string.hpp>
 
 /*
@@ -23,19 +24,11 @@ namespace zia {
     public:
         explicit ProtocolHandler(oZ::Pipeline & pipeline) : _pipeline { pipeline } {};
 
-        ProtocolDataPacket onPacketReceived(const ProtocolDataPacket & incomingPacket)
-        {
-            oZ::Endpoint endpoint {};
-
-            // Little conversion "oZ API" requires a std::vector<int8_t> but I use std::string
-            oZ::ByteArray byteArray(incomingPacket.begin(), incomingPacket.end());
-
-            oZ::Context context(oZ::Packet(std::move(byteArray), endpoint));
-            std::cout << "VOILA LE MESSAGE RECU : " << incomingPacket << std::endl;
-            _pipeline.runPipeline(context);
-            return ProtocolDataPacket();
-        }
     private:
+        ProtocolDataPacket  _onPacketReceived(const ProtocolDataPacket & incomingPacket);
+        std::string         _createHeaderToSend(oZ::Context & context) const;
+        std::string         _createBodyToSend(oZ::Context & context) const;
+
         oZ::Pipeline &  _pipeline;
     };
 }

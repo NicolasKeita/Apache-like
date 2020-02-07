@@ -26,7 +26,7 @@ public:
     /**
      * @brief Get the response's header constant reference
      */
-    [[nodiscard]] const Header &getHeader(void) const noexcept { return _header; }
+    //[[nodiscard]] const Header &getHeader(void) const noexcept { return _header; }
 
     /**
      * @brief Get request's Body reference

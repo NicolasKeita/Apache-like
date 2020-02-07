@@ -109,6 +109,11 @@ namespace oZ {
              */
             bool operator==(const Version &other) const noexcept { return majorVersion == other.majorVersion && minorVersion == other.minorVersion; }
 
+            /**
+            * @brief Comparison operator
+            */
+//            [[nodiscard]] std::string toString() const noexcept {  }
+
             std::uint8_t majorVersion = 0; std::uint8_t minorVersion = 0;
         };
 

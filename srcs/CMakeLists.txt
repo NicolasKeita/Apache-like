@@ -58,6 +58,8 @@ elseif(MSVC)
 endif()
 
 if (MSVC)
-    # Tells the compiler you are on Windows 10. It suppress warnings.
+    # Tells the compiler you are on Windows 10. It suppresses some warnings.
     add_compile_definitions(_WIN32_WINNT=0x0A00)
 endif()
+
+add_subdirectory(./modules/)

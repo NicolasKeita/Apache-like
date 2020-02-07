@@ -64,8 +64,10 @@ void Pipeline::onLoadModules(const std::string &directoryPath)
     }
 }
 
+#include <iostream>
 void Pipeline::registerCallback(State state, Priority priority, CallbackHandler &&handler)
 {
+    std::cout << "CALL 1.2" << std::endl;
     auto &callbacks = _pipeline[state];
     auto it = callbacks.cbegin();
 

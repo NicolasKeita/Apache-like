@@ -14,14 +14,15 @@ namespace zia {
     public:
         explicit Server(const unsigned short int portToOpen, const uti::network::ProtocolType &protocolType)
             : uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket> { protocolType },
-              _pipeline { "../lib", "./"}
+              _pipeline { "../lib", "./"},
+              _protocolHandler { _pipeline }
         {
             _pipeline.loadModules();
             this->template turnOn<decltype(_protocolHandler)>(portToOpen, &zia::ProtocolHandler::onPacketReceived, _protocolHandler);
         }
     private:
-        ProtocolHandler _protocolHandler;
         oZ::Pipeline    _pipeline;
+        ProtocolHandler _protocolHandler;
     };
 }
 

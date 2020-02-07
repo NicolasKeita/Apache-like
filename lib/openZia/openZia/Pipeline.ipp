@@ -5,10 +5,15 @@
 ** Pipeline Abstraction
 */
 
+
+#include <iostream>
+
 template<typename ModuleType>
 void oZ::Pipeline::registerCallback(State state, Priority priority, ModuleType *target, bool(ModuleType::*callback)(Context &))
 {
+    std::cout << "CALL 0.4" << std::endl;
     registerCallback(state, priority, [target, callback](Context &context) {
+        std::cout << "CALL 1" << std::endl;
         return (target->*callback)(context);
     });
 }

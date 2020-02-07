@@ -10,7 +10,9 @@ add_library(my_parsers STATIC
 
 target_include_directories(my_parsers SYSTEM PUBLIC
         nolhmann_json_library/include
-        ${Boost_INCLUDE_DIRS})
+        ${CONAN_INCLUDE_DIRS_BOOST}
+        #${Boost_INCLUDE_DIRS}
+        )
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     target_compile_options(my_parsers PRIVATE

@@ -30,6 +30,19 @@ namespace uti::network {
             _socket = std::make_unique<udp::socket>(_io_context, udp::endpoint(udp::v4(), port));
             _online = true;
 
+            std::cout << "USAGE OF SERIALIZATION" << std::endl;
+            _inbound_data.resize(500);
+            std::fill(_inbound_data.begin(), _inbound_data.end(), 'c');
+
+            //_socket->receive(boost::asio::buffer(_inbound_data));
+
+            T t;
+            std::string archive_data(&_inbound_data[0], _inbound_data.size());
+            std::istringstream archive_stream(archive_data);
+            boost::archive::text_iarchive archive(archive_stream);
+            archive >> t;
+            std::cout << "USAGE OF SERIALIZATION END -------------------" << std::endl;
+
             while (true) {
                 std::array<int8_t, 1024> data = {0};
                 std::pair<T, udp::endpoint> rr = this->getReply<T>();

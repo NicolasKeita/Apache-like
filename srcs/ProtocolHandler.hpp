@@ -24,8 +24,8 @@ namespace zia {
     public:
         explicit ProtocolHandler(oZ::Pipeline & pipeline) : _pipeline { pipeline } {};
 
+        ProtocolDataPacket  onPacketReceived(const ProtocolDataPacket & incomingPacket);
     private:
-        ProtocolDataPacket  _onPacketReceived(const ProtocolDataPacket & incomingPacket);
         std::string         _createHeaderToSend(oZ::Context & context) const;
         std::string         _createBodyToSend(oZ::Context & context) const;
 

@@ -19,8 +19,9 @@ namespace zia {
                   _protocolHandler { _pipeline }
         {
             _pipeline.loadModules();
+            std::cout << "MODULES supposesly LOADED !" << std::endl;
             this->template turnOn<decltype(_protocolHandler)>(portToOpen,
-                                                              &zia::ProtocolHandler::_onPacketReceived,
+                                                              &zia::ProtocolHandler::onPacketReceived,
                                                               _protocolHandler);
         }
     private:

@@ -6,7 +6,7 @@
 #include <sstream>
 #include "ProtocolHandler.hpp"
 
-ProtocolDataPacket zia::ProtocolHandler::_onPacketReceived(const ProtocolDataPacket &incomingPacket)
+ProtocolDataPacket zia::ProtocolHandler::onPacketReceived(const ProtocolDataPacket &incomingPacket)
 {
     // Cast to ByteArray cuz "oZ API" requires a std::vector<int8_t> == ByteArray but I use std::string
     oZ::ByteArray byteArray(incomingPacket.begin(), incomingPacket.end());
@@ -36,7 +36,7 @@ std::string zia::ProtocolHandler::_createHeaderToSend(oZ::Context &context) cons
     context.getResponse().getHeader().set("version",  versionToString.str());
 
     context.getResponse().getHeader().set("statut",  reason);
-    context.getResponse().getHeader().set("code", static_cast<unsigned int>(code));
+    context.getResponse().getHeader().set("code", static_cast<int8_t>(code));
 
     context.getResponse().getHeader().set("content-type", "Content-Type: text/plain");
     context.getResponse().getHeader().set("content-length", "Content-Length: 12");
@@ -51,7 +51,7 @@ std::string zia::ProtocolHandler::_createHeaderToSend(oZ::Context &context) cons
 
 std::string zia::ProtocolHandler::_createBodyToSend(oZ::Context &context) const
 {
-    std::string body = "Hello worldE\n";
+    std::string body = "Hello worlE\n";
     context.getResponse().getBody() = body;
     return context.getResponse().getBody();
 }

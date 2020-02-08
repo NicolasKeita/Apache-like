@@ -27,10 +27,11 @@ boost:without_atomic=True
 boost:without_timer=True
 boost:without_type_erasure=True
 boost:without_wave=True
-boost:without_thread=True
-boost:without_system=True
+#boost:without_thread=True
+#boost:without_system=True
 boost:without_stacktrace=True
 boost:header_only=True
+boost:fPIC=False
 
 [generators]
 cmake

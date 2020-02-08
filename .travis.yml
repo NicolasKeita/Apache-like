@@ -61,7 +61,7 @@ install:
 before_script:
   - mkdir -p ./build/
   - cd ./build/
-  - conan install ../ --build=missing -s
+  - conan install ../ --build=missing
   - sed -i 's/read/read -r/g' activate.sh # to fix a little mistake in the .sh from Conan
   - source activate.sh
   - cmake -DCMAKE_BUILD_TYPE=Debug ../

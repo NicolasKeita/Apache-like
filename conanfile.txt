@@ -6,6 +6,12 @@ boost/1.71.0@conan/stable
 
 [options]
 boost:shared=False
+boost:without_math=True
+boost:without_locale=True
+boost:without_graph=True
+boost:without_random=True
+boost:without_regex=True
+boost:without_atomic=True
 
 [generators]
 cmake

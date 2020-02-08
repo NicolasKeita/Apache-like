@@ -5,7 +5,7 @@ boost/1.71.0@conan/stable
 
 
 [options]
-boost:shared=True
+boost:shared=False
 boost:without_chrono=True
 boost:without_context=True
 boost:without_contract=True

@@ -36,6 +36,7 @@ jobs:
         - conan profile update settings.compiler="Visual Studio" default
         - conan profile update settings.compiler.version=16 default # Visual Studio 2019
         - conan profile update settings.compiler.cppstd=14 default
+        - conan profile update settings.build_type=Debug default
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 install:
@@ -60,10 +61,10 @@ install:
 before_script:
   - mkdir -p ./build/
   - cd ./build/
-  - conan install ../ --build=missing -s build_type=Release
+  - conan install ../ --build=missing -s
   - sed -i 's/read/read -r/g' activate.sh # to fix a little mistake in the .sh from Conan
   - source activate.sh
-  - cmake -DCMAKE_BUILD_TYPE=Release ../
+  - cmake -DCMAKE_BUILD_TYPE=Debug ../
 
 script:
   - cmake --build ./

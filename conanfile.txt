@@ -2,8 +2,11 @@
 boost/1.71.0@conan/stable
 
 [build_requires]
+bzip2/1.0.8@conan/stable
+zlib/1.2.11@conan/stable
 
 [options]
+boost:shared=True
 boost:asio_no_deprecated=False
 boost:bzip2=True
 boost:error_code_header_only=False
@@ -17,7 +20,6 @@ boost:namespace_alias=False
 boost:segmented_stacks=False
 boost:python_version=None
 boost:python_executable=None
-boost:shared=False
 boost:system_no_deprecated=False
 boost:use_icu=False
 boost:without_atomic=False

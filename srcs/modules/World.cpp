@@ -4,4 +4,4 @@
 
 #include "World.hpp"
 
-extern "C" oZ::ModulePtr CreateModule(void) { return std::make_shared<World>(); }
+extern "C" oZ::IModule * CreateModule(void) { return new oZ::World; }

@@ -105,7 +105,7 @@ public:
     /**
      * @brief Get the Response of the HTTP context (constant)
      */
-    //[[nodiscard]] const HTTP::Response &getResponse(void) const noexcept { return _response; }
+    [[nodiscard]] const HTTP::Response &getResponse(void) const noexcept { return _response; }
 
     /**
      * @brief Get the current context' state

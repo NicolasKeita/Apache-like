@@ -15,5 +15,5 @@ namespace oZ
     /**
      * @brief Simple vector of byte used as network buffer
      */
-    using ByteArray = std::vector<std::uint8_t>;
+    using ByteArray = std::vector<std::int8_t>;
 }

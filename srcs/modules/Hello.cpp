@@ -4,4 +4,4 @@
 
 #include "Hello.hpp"
 
-extern "C" oZ::ModulePtr CreateModule(void) { return std::make_shared<oZ::Hello>(); }
+extern "C" oZ::IModule * CreateModule(void) { return new oZ::Hello; }

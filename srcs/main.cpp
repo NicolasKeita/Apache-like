@@ -23,14 +23,8 @@ unsigned short int extractPortNumberFromArgs(const std::string & argument1)
 
 int main(int argc, char *argv[], char **env)
 {
-    uti::MyProgArgs args(argc, argv, env, 1);
-
-    unsigned short int port = extractPortNumberFromArgs(args.getArgs().at(1));
-   // try {
-        zia::Server<std::string> server(port, uti::network::TEXT);
-    //}
-    //catch (const std::runtime_error &e) {
-     //   std::cerr << "API not handling the absence of .so in the dir ?" << std::endl;
-    //}
+    uti::MyProgArgs             args(argc, argv, env, 1);
+    unsigned short int          port = extractPortNumberFromArgs(args.getArgs().at(1));
+    zia::Server<std::string>    server(port, uti::network::TEXT);
     return 0;
 }

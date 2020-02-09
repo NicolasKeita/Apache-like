@@ -63,3 +63,5 @@ if (MSVC)
 endif()
 
 add_subdirectory(./modules/)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/www/index.html ${CMAKE_BINARY_DIR}/bin/index.html COPYONLY)

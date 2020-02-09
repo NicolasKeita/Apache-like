@@ -20,7 +20,6 @@ jobs:
         - conan profile update settings.compiler.libcxx=gcc default
         - conan profile update settings.compiler.libcxx=libstdc++11 default
         - conan profile update settings.compiler.version=9 default
-        - conan profile update settings.build_type=Debug default
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
     - os: windows
@@ -37,7 +36,6 @@ jobs:
         - conan profile update settings.compiler="Visual Studio" default
         - conan profile update settings.compiler.version=16 default # Visual Studio 2019
         - conan profile update settings.compiler.cppstd=20 default
-        - conan profile update settings.build_type=Debug default
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 install:
@@ -62,10 +60,10 @@ install:
 before_script:
   - mkdir -p ./build/
   - cd ./build/
-  - conan install ../ --build=missing
+  - conan install ../ --build=missing -s build_type=Release
   - sed -i 's/read/read -r/g' activate.sh # to fix a little mistake in activate.sh from Conan
   - source activate.sh
-  - cmake -DCMAKE_BUILD_TYPE=Debug ../
+  - cmake -DCMAKE_BUILD_TYPE=Release ../
 
 script:
   - cmake --build ./

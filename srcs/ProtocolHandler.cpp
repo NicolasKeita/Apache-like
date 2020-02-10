@@ -39,8 +39,7 @@ std::string zia::ProtocolHandler::_createHeaderToSend(oZ::Context &context) cons
     context.getResponse().getHeader().set("statut",  reason);
     context.getResponse().getHeader().set("code", static_cast<int8_t>(code));
 
-    context.getResponse().getHeader().set("content-type", "Content-Type: Multipart");
-    context.getResponse().getHeader().set("content-length", "Content-Length: 11568");
+    // content-type and content-length are handled in _createBodyToSend()
     return (
             context.getResponse().getHeader().get("version") + " " +
             context.getResponse().getHeader().get("statut") + " " +
@@ -58,7 +57,9 @@ std::string zia::ProtocolHandler::_createBodyToSend(oZ::Context &context) const
     fileStream.close();
 
 //    std::cerr << "SIZE --- : " << sstr.str().size() << std::endl;
-//    std::string body = "Hello worlE\n";
+    context.getResponse().getHeader().set("content-type", "Content-Type: Multipart");
+    auto contentSize = sstr.str().size();
+    context.getResponse().getHeader().set("content-length", "Content-Length: " + std::to_string(contentSize));
     context.getResponse().getBody() = sstr.str();
     return context.getResponse().getBody();
 }

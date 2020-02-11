@@ -1,20 +1,11 @@
 cmake_minimum_required(VERSION 3.14.5)
 project(My_Apache)
 
-set(BINARY              hello)
+set(BINARY              module)
 set(CMAKE_CXX_STANDARD	20)
-
-add_library(${BINARY} SHARED
-        Hello.cpp
-        )
 
 add_library(${BINARY}_SSL SHARED
         SSL.cpp
-        )
-
-target_include_directories(${BINARY} SYSTEM PUBLIC
-        ${CONAN_INCLUDE_DIRS_BOOST}
-        ${CMAKE_HOME_DIRECTORY}/lib/openZia
         )
 
 target_include_directories(${BINARY}_SSL SYSTEM PUBLIC
@@ -31,21 +22,9 @@ target_link_libraries(${BINARY}_SSL PRIVATE
         ${CONAN_LIBS_BOOST}
         )
 
-target_include_directories(${BINARY} PRIVATE
-        ${CMAKE_HOME_DIRECTORY}/lib/uti/
-        )
-
-target_link_directories(${BINARY} PRIVATE
-        )
-
-target_link_libraries(${BINARY} PRIVATE
-        openZia
-        ${CONAN_LIBS_BOOST}
-        )
-
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    target_compile_options(${BINARY} PRIVATE
+    target_compile_options(${BINARY}_SSL PRIVATE
             -Wall
             -Wextra
             -Wshadow

@@ -21,10 +21,12 @@ void zia::SSL::onRegisterCallbacks(oZ::Pipeline &pipeline)
 
 bool zia::SSL::_onInterpret(oZ::Context &context)
 {
-    (void)context;
     oZ::Log(oZ::Information) << "Module 'SSL' wrote successfully its message";
     std::cout << "SSL module has been called" << std::endl;
-    exit(43);
+
+    (void)context;
+    //exit(43);
+
     return true;
 }
 

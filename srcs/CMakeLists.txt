@@ -11,10 +11,9 @@ add_executable(${BINARY}
 
 target_include_directories(${BINARY} SYSTEM PUBLIC
         ${CONAN_INCLUDE_DIRS_BOOST}
+        ${CONAN_INCLUDE_DIRS_OPENSSL}
         ${CMAKE_HOME_DIRECTORY}/lib/openZia
         )
-#        ${Boost_INCLUDE_DIRS}
-#        ${BOOST_INCLUDE_DIRS}
 
 target_include_directories(${BINARY} PRIVATE
         ${CMAKE_HOME_DIRECTORY}/lib/uti/

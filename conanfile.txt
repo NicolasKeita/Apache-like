@@ -1,5 +1,5 @@
 [requires]
-boost/1.71.0@conan/stable # boost asio serialization
+boost/1.71.0@conan/stable # Component asio and serialization
 openssl/1.0.2s
 zlib/1.2.11 # boost and openssl requires zlib
 

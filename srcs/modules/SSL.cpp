@@ -3,3 +3,26 @@
 */
 
 #include "SSL.hpp"
+
+const char * zia::SSL::getName() const noexcept
+{
+    return "SSL";
+}
+
+
+void zia::SSL::onRegisterCallbacks(oZ::Pipeline &pipeline)
+{
+    pipeline.registerCallback(
+            oZ::State::Interpret, // Call at response creation time
+            oZ::Priority::ASAP,
+            this, &SSL::_onInterpret
+    );
+}
+
+bool zia::SSL::_onInterpret(oZ::Context &context)
+{
+    (void)context;
+    oZ::Log(oZ::Information) << "Module 'SSL' wrote successfully its message";
+    std::cout << "SSL module has been called" << std::endl;
+    return true;
+}

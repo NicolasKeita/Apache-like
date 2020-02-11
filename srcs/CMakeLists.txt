@@ -25,6 +25,7 @@ target_link_directories(${BINARY} PRIVATE
 
 target_link_libraries(${BINARY} PRIVATE
         openZia
+        ${CONAN_LIBS_OPENSSL}
         ${CONAN_LIBS_BOOST}
         )
 

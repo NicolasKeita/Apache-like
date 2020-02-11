@@ -8,8 +8,8 @@ add_library(${BINARY} SHARED
         Hello.cpp
         )
 
-add_library(${BINARY}_world SHARED
-        World.cpp
+add_library(${BINARY}_SSL SHARED
+        SSL.cpp
         )
 
 target_include_directories(${BINARY} SYSTEM PUBLIC
@@ -17,16 +17,16 @@ target_include_directories(${BINARY} SYSTEM PUBLIC
         ${CMAKE_HOME_DIRECTORY}/lib/openZia
         )
 
-target_include_directories(${BINARY}_world SYSTEM PUBLIC
+target_include_directories(${BINARY}_SSL SYSTEM PUBLIC
         ${CONAN_INCLUDE_DIRS_BOOST}
         ${CMAKE_HOME_DIRECTORY}/lib/openZia
         )
 
-target_include_directories(${BINARY}_world PRIVATE
+target_include_directories(${BINARY}_SSL PRIVATE
         ${CMAKE_HOME_DIRECTORY}/lib/uti/
         )
 
-target_link_libraries(${BINARY}_world PRIVATE
+target_link_libraries(${BINARY}_SSL PRIVATE
         openZia
         ${CONAN_LIBS_BOOST}
         )

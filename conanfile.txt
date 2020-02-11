@@ -1,10 +1,13 @@
 [requires]
-boost/1.71.0@conan/stable
+boost/1.71.0@conan/stable # boost asio serialization
+openssl/1.0.2s
+zlib/1.2.11 # boost and openssl requires zlib
 
 [build_requires]
 
 [options]
 boost:shared=True
+openssl:shared=True
 
 [generators]
 cmake

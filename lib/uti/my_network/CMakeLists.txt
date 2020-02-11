@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.14.5)
 project(my_network_library)
 
 set(CMAKE_CXX_STANDARD		    20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(Boost_USE_STATIC_LIBS        ON)
+set(Boost_USE_STATIC_LIBS        OFF)
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 set(BINARY                      my_network)

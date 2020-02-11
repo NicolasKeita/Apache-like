@@ -12,17 +12,18 @@
 #include <iostream>
 #include <functional>
 #include <boost/asio.hpp>
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/ssl.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/asio/buffer.hpp>
 #include <boost/format.hpp>
 
 namespace uti::network {
@@ -33,7 +34,8 @@ namespace uti::network {
 
         // It is recommended to choose Binary as protocol type if you have control over the client
         explicit ServerTcpMultiThreadWrapper(ProtocolType protocolType)
-                : _online { false },
+                //: _context { boost::asio::ssl::context::sslv23 },
+                 : _online { false },
                   _inbound_header {},
                   _header_length { 8 },
                   _inbound_data {},
@@ -171,6 +173,7 @@ namespace uti::network {
 
     private:
         boost::asio::io_context                         _io_context;
+//        boost::asio::ssl::context                       _context;
         std::list<boost::asio::ip::tcp::socket>         _sockets;
         std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
         bool                _online;

@@ -12,12 +12,15 @@
 namespace zia {
     class SSL : public oZ::IModule {
     public:
-        [[nodiscard]] const char *getName() const noexcept override;
-        void onRegisterCallbacks(oZ::Pipeline &pipeline) override;
+        SSL();
+        [[nodiscard]] const char *  getName() const noexcept override;
+        void                        onRegisterCallbacks(oZ::Pipeline &pipeline) override;
 
     private:
-        bool _onInterpret(oZ::Context &context);
+        bool                        _onInterpret(oZ::Context &context);
 
+    private:
+        boost::asio::ssl::context   _context;
     };
 }
 

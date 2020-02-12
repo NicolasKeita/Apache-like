@@ -2,7 +2,15 @@
 ** Creation Year : 2020 ; Month : 02 ; Day : 10.
 */
 
+#include <boost/asio.hpp>
+#include <boost/asio/ssl.hpp>
 #include "SSL.hpp"
+
+zia::SSL::SSL()
+        : _context { boost::asio::ssl::context::sslv23 }
+{
+
+}
 
 const char * zia::SSL::getName() const noexcept
 {

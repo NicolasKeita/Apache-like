@@ -34,10 +34,11 @@ std::string zia::ProtocolHandler::_createHeaderToSend(oZ::Context &context) cons
 
     std::ostringstream versionToString;
     versionToString << "HTTP/" << version.majorVersion << "." << version.minorVersion;
-    context.getResponse().getHeader().set("version",  versionToString.str());
+    context.getResponse().getHeader().set<std::string, std::string>("version",  versionToString.str()); //The fuck is this template
 
-    context.getResponse().getHeader().set("statut",  reason);
-    context.getResponse().getHeader().set("code", static_cast<int8_t>(code));
+    context.getResponse().getHeader().set<std::string, std::string>("statut",
+                                                                    static_cast<std::basic_string<char, std::char_traits<char>, std::allocator<char>> &&>(reason));
+    context.getResponse().getHeader().set<std::string, std::string>("code", std::to_string(static_cast<double>(code)));
 
     // content-type and content-length are handled in _createBodyToSend()
     return (

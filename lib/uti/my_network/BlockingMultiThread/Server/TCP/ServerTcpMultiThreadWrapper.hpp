@@ -34,7 +34,6 @@ namespace uti::network {
 
         // It is recommended to choose Binary as protocol type if you have control over the client
         explicit ServerTcpMultiThreadWrapper(ProtocolType protocolType)
-                //: _context { boost::asio::ssl::context::sslv23 },
                  : _online { false },
                   _inbound_header {},
                   _header_length { 8 },
@@ -44,12 +43,11 @@ namespace uti::network {
 
         template <class ProtocolHandlerPointer>
         void turnOn(const unsigned short int port,
-//                    std::function<ProtocolDataPacket(const ProtocolDataPacket &)> handleMessageReceived,
-                    ProtocolDataPacket (ProtocolHandlerPointer::*onPacketReceived)(const ProtocolDataPacket &), // TODO: ask APE, how to replace this by std::function
+//                    std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived, // TODO: replace the line below by std::function
+                    ProtocolDataPacket (ProtocolHandlerPointer::*onPacketReceived)(const ProtocolDataPacket &),
                     ProtocolHandlerPointer protocolHandler
                     )
         {
-
             using boost::asio::ip::tcp;
             _sockets.push_back(tcp::socket(_io_context));
             _acceptor = std::make_unique<tcp::acceptor>(_io_context, tcp::endpoint(tcp::v4(), port));

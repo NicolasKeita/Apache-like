@@ -2,14 +2,14 @@
 ** Creation Year : 2020 ; Month : 02 ; Day : 10.
 */
 
-#include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include "SSL.hpp"
 
 zia::SSL::SSL()
         : _context { boost::asio::ssl::context::sslv23 }
 {
-
+    _context.set_verify_mode(boost::asio::ssl::verify_peer);
+    //_context.load_verify_file("ca.pem");
 }
 
 const char * zia::SSL::getName() const noexcept

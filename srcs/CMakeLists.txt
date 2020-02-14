@@ -65,3 +65,4 @@ endif()
 add_subdirectory(./modules/)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/www/index.html ${CMAKE_BINARY_DIR}/bin/index.html COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/modules/mycert.pem ${CMAKE_BINARY_DIR}/bin/mycert.pem COPYONLY)

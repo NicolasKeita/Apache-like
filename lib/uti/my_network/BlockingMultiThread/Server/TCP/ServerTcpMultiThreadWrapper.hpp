@@ -171,7 +171,6 @@ namespace uti::network {
 
     private:
         boost::asio::io_context                         _io_context;
-//        boost::asio::ssl::context                       _context;
         std::list<boost::asio::ip::tcp::socket>         _sockets;
         std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
         bool                _online;

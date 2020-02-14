@@ -10,6 +10,7 @@ add_library(${BINARY}_SSL SHARED
 
 target_include_directories(${BINARY}_SSL SYSTEM PUBLIC
         ${CONAN_INCLUDE_DIRS_BOOST}
+        ${CONAN_INCLUDE_DIRS_OPENSSL}
         ${CMAKE_HOME_DIRECTORY}/lib/openZia
         )
 
@@ -20,6 +21,7 @@ target_include_directories(${BINARY}_SSL PRIVATE
 target_link_libraries(${BINARY}_SSL PRIVATE
         openZia
         ${CONAN_LIBS_BOOST}
+        ${CONAN_LIBS_OPENSSL}
         )
 
 

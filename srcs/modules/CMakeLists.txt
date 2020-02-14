@@ -4,7 +4,7 @@ project(My_Apache)
 set(BINARY              module)
 set(CMAKE_CXX_STANDARD	20)
 
-add_library(${BINARY}_SSL SHARED
+add_library(${BINARY}_SSL MODULE
         SSL.cpp
         )
 
@@ -23,7 +23,6 @@ target_link_libraries(${BINARY}_SSL PRIVATE
         ${CONAN_LIBS_BOOST}
         ${CONAN_LIBS_OPENSSL}
         )
-
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     target_compile_options(${BINARY}_SSL PRIVATE

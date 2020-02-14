@@ -21,7 +21,7 @@
 # if defined(SYSTEM_LINUX)
 #  define OPEN_ZIA_EXPORT
 # elif defined(SYSTEM_WINDOWS)
-#  define OPEN_ZIA_EXPORT __declspec(dllexport) __stdcall
+#  define OPEN_ZIA_EXPORT __declspec(dllexport)
 # endif
 
 # define STR_VALUE(arg) #arg
@@ -34,7 +34,7 @@
  * @brief Shortcut to create a function entry point of your module
  */
 # define OPEN_ZIA_MAKE_ENTRY_POINT(class)                           \
-    EXTERN_C OPEN_ZIA_EXPORT oZ::IModule *OPEN_ZIA_ENTRY_POINT()    \
+    EXTERN_C OPEN_ZIA_EXPORT oZ::IModule * __stdcall OPEN_ZIA_ENTRY_POINT()    \
     {                                                               \
         return new class();                                         \
     }                                                               \

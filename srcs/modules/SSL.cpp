@@ -42,5 +42,4 @@ bool zia::SSL::_onInterpret(oZ::Context &context)
     return true;
 }
 
-//extern "C" oZ::IModule * CreateModule() { return new zia::SSL; }
 OPEN_ZIA_MAKE_ENTRY_POINT(zia::SSL)

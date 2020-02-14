@@ -34,7 +34,7 @@
  * @brief Shortcut to create a function entry point of your module
  */
 # define OPEN_ZIA_MAKE_ENTRY_POINT(class)                           \
-    EXTERN_C OPEN_ZIA_EXPORT oZ::IModule * __stdcall OPEN_ZIA_ENTRY_POINT()    \
+    EXTERN_C OPEN_ZIA_EXPORT oZ::IModule * OPEN_ZIA_ENTRY_POINT()    \
     {                                                               \
         return new class();                                         \
     }                                                               \

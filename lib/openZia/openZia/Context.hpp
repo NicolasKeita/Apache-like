@@ -155,11 +155,12 @@ public:
      */
     [[nodiscard]] bool isConstant(void) const noexcept { return _constant; }
 
+public:
+    boost::asio::ip::tcp::socket & socket;
 private:
     Packet _packet {};
     HTTP::Request _request {};
     HTTP::Response _response {};
     State _state = State::BeforeParse;
     bool _constant = true;
-    boost::asio::ip::tcp::socket & socket;
 };

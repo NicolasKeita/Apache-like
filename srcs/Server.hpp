@@ -21,6 +21,8 @@ namespace zia {
                   _protocolHandler { _pipeline }
         {
             _pipeline.loadModules();
+            if (_pipeline.findModule("SSL"))
+                this->_sslEnabled = true;
             std::cout << "[DEBUG ZIA] Modules loaded !" << std::endl;
             this->turnOn(portToOpen,
                          std::bind(&zia::ProtocolHandler::onPacketReceived,

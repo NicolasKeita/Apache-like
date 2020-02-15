@@ -35,6 +35,7 @@ namespace uti::network {
         // It is recommended to choose Binary as protocol type if you have control over the client
         explicit ServerTcpMultiThreadWrapper(ProtocolType protocolType)
                  : _online { false },
+                  _context { boost::asio::ssl::context::sslv23 },
                   _inbound_header {},
                   _header_length { 8 },
                   _inbound_data {},
@@ -42,7 +43,8 @@ namespace uti::network {
         {}
 
         void turnOn(const unsigned short int port,
-                    std::function<ProtocolDataPacket(const ProtocolDataPacket &, boost::asio::ip::tcp::socket &)> onPacketReceived)
+                    std::function<ProtocolDataPacket(const ProtocolDataPacket &,
+                                                     boost::asio::ip::tcp::socket &)> onPacketReceived)
         {
             using boost::asio::ip::tcp;
             _sockets.push_back(tcp::socket(_io_context));
@@ -162,11 +164,16 @@ namespace uti::network {
             }
         }
 
-    private:
-        boost::asio::io_context                         _io_context;
-        std::list<boost::asio::ip::tcp::socket>         _sockets;
-        std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
+    protected:
+        bool                _sslEnabled;
         bool                _online;
+    private:
+        using SslSocket = boost::asio::ssl::stream<boost::asio::ip::tcp::socket>;
+        boost::asio::io_context                         _io_context;
+        boost::asio::ssl::context                       _context;
+        std::list<boost::asio::ip::tcp::socket>                            _sockets;
+        //std::list<SslSocket>                            _sockets;
+        std::unique_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
         char                _inbound_header[8];
         size_t              _header_length;
         std::vector<char>   _inbound_data;

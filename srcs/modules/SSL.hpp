@@ -21,6 +21,7 @@ namespace zia {
 
     private:
         boost::asio::ssl::context   _context;
+        //boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
     };
 }
 

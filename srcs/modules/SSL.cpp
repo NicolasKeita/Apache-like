@@ -14,6 +14,7 @@ zia::SSL::SSL()
         : _context { boost::asio::ssl::context::sslv23 }
 {
     _context.set_verify_mode(boost::asio::ssl::verify_peer);
+    _context.set_default_verify_paths();
     _context.load_verify_file("mycert.pem");
 }
 
@@ -25,7 +26,8 @@ const char * zia::SSL::getName() const noexcept
 void zia::SSL::onRegisterCallbacks(oZ::Pipeline &pipeline)
 {
     pipeline.registerCallback(
-            oZ::State::Interpret, // Call at response creation time
+//            oZ::State::Interpret, // Call at response creation time
+            oZ::State::BeforeParse,
             oZ::Priority::ASAP,
             this, &SSL::_onInterpret
     );
@@ -33,6 +35,7 @@ void zia::SSL::onRegisterCallbacks(oZ::Pipeline &pipeline)
 
 bool zia::SSL::_onInterpret(oZ::Context &context)
 {
+//    ssl_socket. = context.socket;
     oZ::Log(oZ::Information) << "Module 'SSL' wrote successfully its message";
     std::cout << "SSL module has been called" << std::endl;
 

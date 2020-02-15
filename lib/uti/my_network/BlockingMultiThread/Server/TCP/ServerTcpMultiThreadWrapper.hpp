@@ -43,13 +43,11 @@ namespace uti::network {
 
         template <class ProtocolHandlerPointer>
         void turnOn(const unsigned short int port,
-//                    std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived, // TODO: replace the line below by std::function
-                    ProtocolDataPacket (ProtocolHandlerPointer::*onPacketReceived)(const ProtocolDataPacket &),
-                    ProtocolHandlerPointer protocolHandler
-                    )
+                    std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
         {
             using boost::asio::ip::tcp;
             _sockets.push_back(tcp::socket(_io_context));
+
             _acceptor = std::make_unique<tcp::acceptor>(_io_context, tcp::endpoint(tcp::v4(), port));
             _online = true;
 
@@ -61,8 +59,7 @@ namespace uti::network {
                                        std::ref(_sockets),
                                        std::ref(_sockets.back()), // TODO: remove this extra param
                                        clientMessage,
-                                       onPacketReceived,
-                                       protocolHandler
+                                       onPacketReceived
                                        );
                 thread_obj.detach();
                 if (!_online)
@@ -124,11 +121,10 @@ namespace uti::network {
         void _handleRequest([[maybe_unused]] std::list<boost::asio::ip::tcp::socket> &sockets,
                             boost::asio::ip::tcp::socket &socket,
                             const ProtocolDataPacket data,
-                            ProtocolDataPacket (ProtocolHandlerPointer::*onPacketReceived)(const ProtocolDataPacket &), // TODO: ask APE, how to replace this by std::function
-                            ProtocolHandlerPointer protocolHandler)
+                            std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
         {
-            auto onPacketReceivedBinded = std::bind(onPacketReceived, protocolHandler, std::placeholders::_1);
-            const ProtocolDataPacket serverReplyToClient = onPacketReceivedBinded(data);
+//            auto onPacketReceivedBinded = std::bind(onPacketReceived, protocolHandler, std::placeholders::_1);
+            const ProtocolDataPacket serverReplyToClient = onPacketReceived(data);
             _sendMessage(socket, serverReplyToClient);
             socket.close();
             // TODO remove the socket from the list of sockets after closing it.

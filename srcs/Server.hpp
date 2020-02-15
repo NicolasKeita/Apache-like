@@ -5,6 +5,8 @@
 #pragma once
 
 #include <string>
+#include <utility>
+#include <functional>
 #include "my_network/BlockingMultiThread/Server/TCP/ServerTcpMultiThreadWrapper.hpp"
 #include "ProtocolHandler.hpp"
 
@@ -20,9 +22,12 @@ namespace zia {
         {
             _pipeline.loadModules();
             std::cout << "MODULES supposesly LOADED !" << std::endl;
-            this->template turnOn<decltype(_protocolHandler)>(portToOpen,
-                                                              &zia::ProtocolHandler::onPacketReceived,
-                                                              _protocolHandler);
+            this->turnOn<ProtocolHandler>(portToOpen,
+                                          std::bind(&zia::ProtocolHandler::onPacketReceived,
+                                                    _protocolHandler,
+                                                    std::placeholders::_1
+                                          )
+            );
         }
     private:
         oZ::Pipeline    _pipeline;

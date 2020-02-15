@@ -41,7 +41,6 @@ namespace uti::network {
                   _protocolType { protocolType }
         {}
 
-        template <class ProtocolHandlerPointer>
         void turnOn(const unsigned short int port,
                     std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
         {
@@ -54,7 +53,7 @@ namespace uti::network {
             while (true) {
                 _acceptor->accept(_sockets.back());
                 const ProtocolDataPacket clientMessage = this->getIncomingClientMessage(_sockets.back());
-                std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest<ProtocolHandlerPointer>,
+                std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
                                        this,
                                        std::ref(_sockets),
                                        std::ref(_sockets.back()), // TODO: remove this extra param
@@ -117,13 +116,11 @@ namespace uti::network {
         }
 
     private:
-        template<class ProtocolHandlerPointer>
         void _handleRequest([[maybe_unused]] std::list<boost::asio::ip::tcp::socket> &sockets,
                             boost::asio::ip::tcp::socket &socket,
                             const ProtocolDataPacket data,
                             std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
         {
-//            auto onPacketReceivedBinded = std::bind(onPacketReceived, protocolHandler, std::placeholders::_1);
             const ProtocolDataPacket serverReplyToClient = onPacketReceived(data);
             _sendMessage(socket, serverReplyToClient);
             socket.close();

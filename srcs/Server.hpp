@@ -21,12 +21,11 @@ namespace zia {
                   _protocolHandler { _pipeline }
         {
             _pipeline.loadModules();
-            std::cout << "MODULES supposesly LOADED !" << std::endl;
-            this->turnOn<ProtocolHandler>(portToOpen,
-                                          std::bind(&zia::ProtocolHandler::onPacketReceived,
-                                                    _protocolHandler,
-                                                    std::placeholders::_1
-                                          )
+            std::cout << "[DEBUG ZIA] Modules loaded !" << std::endl;
+            this->turnOn(portToOpen,
+                         std::bind(&zia::ProtocolHandler::onPacketReceived,
+                                   _protocolHandler,
+                                   std::placeholders::_1)
             );
         }
     private:

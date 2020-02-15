@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <boost/asio.hpp>
 #include "Packet.hpp"
 #include "HTTP.hpp"
 
@@ -49,6 +50,12 @@ namespace oZ
  *    is constant and thus can be cached.
  * 3) Endpoint is the client who sent a message
  */
+
+/*
+namespace boost::asio::ip::tcp {
+    class socket;
+}*/
+
 class oZ::Context
 {
 public:
@@ -60,7 +67,7 @@ public:
     /**
      * @brief Construct a new Context object using a packet
      */
-    Context(Packet &&packet);
+    Context(Packet &&packet, boost::asio::ip::tcp::socket &socket);
 
     /**
      * @brief Construct a new Context object by copy (this operation can be very expensive !!)
@@ -154,4 +161,5 @@ private:
     HTTP::Response _response {};
     State _state = State::BeforeParse;
     bool _constant = true;
+    boost::asio::ip::tcp::socket & socket;
 };

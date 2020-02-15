@@ -42,7 +42,7 @@ namespace uti::network {
         {}
 
         void turnOn(const unsigned short int port,
-                    std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
+                    std::function<ProtocolDataPacket(const ProtocolDataPacket &, boost::asio::ip::tcp::socket &)> onPacketReceived)
         {
             using boost::asio::ip::tcp;
             _sockets.push_back(tcp::socket(_io_context));
@@ -119,9 +119,9 @@ namespace uti::network {
         void _handleRequest([[maybe_unused]] std::list<boost::asio::ip::tcp::socket> &sockets,
                             boost::asio::ip::tcp::socket &socket,
                             const ProtocolDataPacket data,
-                            std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
+                            std::function<ProtocolDataPacket(const ProtocolDataPacket &, boost::asio::ip::tcp::socket &)> onPacketReceived)
         {
-            const ProtocolDataPacket serverReplyToClient = onPacketReceived(data);
+            const ProtocolDataPacket serverReplyToClient = onPacketReceived(data, socket);
             _sendMessage(socket, serverReplyToClient);
             socket.close();
             // TODO remove the socket from the list of sockets after closing it.

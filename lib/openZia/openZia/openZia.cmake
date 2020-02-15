@@ -15,6 +15,9 @@ get_filename_component(OpenZiaSourcesDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 set(openZiaLibs openZia)
 set(openZiaIncludes ${OpenZiaSourcesDir}/..)
 
+
+
+
 # Library sources
 set(OpenZiaSources
     ${OpenZiaSourcesDir}/ByteArray.hpp
@@ -51,6 +54,14 @@ set(OpenZiaSources
 
 # Create openZia library
 add_library(${PROJECT_NAME} ${OpenZiaSources})
+
+
+find_package(Boost 1.71.0 COMPONENTS serialization)
+find_package(Threads REQUIRED)
+include_directories(${PROJECT_NAME} SYSTEM PUBLIC
+        ${CONAN_INCLUDE_DIRS_BOOST}
+        )
+
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # GCC < 9 requires explicit link to filesystem library

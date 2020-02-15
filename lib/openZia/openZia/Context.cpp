@@ -10,8 +10,9 @@
 
 using namespace oZ;
 
-Context::Context(Packet &&packet)
-    : _packet(std::move(packet))
+Context::Context(Packet &&packet, boost::asio::ip::tcp::socket & socket)
+        : _packet(std::move(packet)),
+          socket (socket)
 {
 }
 

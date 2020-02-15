@@ -7,6 +7,7 @@
 #include <iostream>
 #include <openZia/Pipeline.hpp>
 #include <openZia/Context.hpp>
+#include <boost/asio.hpp>
 #include <boost/serialization/string.hpp>
 
 /*
@@ -24,7 +25,8 @@ namespace zia {
     public:
         explicit ProtocolHandler(oZ::Pipeline & pipeline) : _pipeline { pipeline } {};
 
-        ProtocolDataPacket  onPacketReceived(const ProtocolDataPacket & incomingPacket);
+        ProtocolDataPacket  onPacketReceived(const ProtocolDataPacket & incomingPacket,
+                                             boost::asio::ip::tcp::socket & socket);
     private:
         std::string         _createHeaderToSend(oZ::Context & context) const;
         std::string         _createBodyToSend(oZ::Context & context) const;

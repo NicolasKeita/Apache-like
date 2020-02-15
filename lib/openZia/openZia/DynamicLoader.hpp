@@ -15,6 +15,7 @@
 #if defined(SYSTEM_LINUX) || defined(SYSTEM_DARWIN)
 #include <dlfcn.h>
 #elif defined(SYSTEM_WINDOWS)
+#include <boost/asio.hpp>
 #include <Windows.h>
 #endif
 

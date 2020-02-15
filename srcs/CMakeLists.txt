@@ -57,11 +57,6 @@ elseif(MSVC)
         endif()
 endif()
 
-if (MSVC)
-    # Tells the compiler you are on Windows 10. It suppresses some warnings.
-    add_compile_definitions(_WIN32_WINNT=0x0A00)
-endif()
-
 add_subdirectory(./modules/)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/www/index.html ${CMAKE_BINARY_DIR}/bin/index.html COPYONLY)

@@ -103,10 +103,5 @@ elseif(MSVC)
     endif()
 endif()
 
-if (MSVC)
-    # Tells the compiler you are on Windows 10. It suppress warnings.
-    add_compile_definitions(_WIN32_WINNT=0x0A00)
-endif()
-
 enable_testing()
 add_subdirectory(tests/)

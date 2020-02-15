@@ -5,14 +5,16 @@
 #include <utility>
 #include <sstream>
 #include <fstream>
+#include <boost/asio.hpp>
 #include "ProtocolHandler.hpp"
 
-ProtocolDataPacket zia::ProtocolHandler::onPacketReceived(const ProtocolDataPacket &incomingPacket)
+ProtocolDataPacket zia::ProtocolHandler::onPacketReceived(const ProtocolDataPacket &incomingPacket,
+                                                          boost::asio::ip::tcp::socket & socket)
 {
-    // Cast to ByteArray cuz "oZ API" requires a std::vector<int8_t> == ByteArray but I use std::string
+// Cast to ByteArray cuz "oZ API" requires a std::vector<int8_t> == ByteArray but I use std::string
     oZ::ByteArray byteArray(incomingPacket.begin(), incomingPacket.end());
 
-    oZ::Context context(oZ::Packet(std::move(byteArray), oZ::Endpoint()));
+    oZ::Context context(oZ::Packet(std::move(byteArray), oZ::Endpoint()), socket);
     _pipeline.runPipeline(context);
 
     std::string responseBody = _createBodyToSend(context);
@@ -57,7 +59,6 @@ std::string zia::ProtocolHandler::_createBodyToSend(oZ::Context &context) const
     sstr << fileStream.rdbuf();
     fileStream.close();
 
-//    std::cerr << "SIZE --- : " << sstr.str().size() << std::endl;
     context.getResponse().getHeader().set("content-type", "Content-Type: Multipart");
     auto contentSize = sstr.str().size();
     context.getResponse().getHeader().set("content-length", "Content-Length: " + std::to_string(contentSize));

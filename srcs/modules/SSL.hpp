@@ -8,6 +8,8 @@
 #include <openZia/ILogger.hpp>
 #include <openZia/Log.hpp>
 #include <openZia/Pipeline.hpp>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
 
 namespace zia {
     class SSL : public oZ::IModule {
@@ -18,9 +20,13 @@ namespace zia {
 
     private:
         bool                        _onInterpret(oZ::Context &context);
+        void static                 _initOpenSSL();
+        void                        _createContext();
+        void                        _configureContext();
 
     private:
         boost::asio::ssl::context   _context;
+        SSL_CTX *                   _ctx;
     };
 }
 

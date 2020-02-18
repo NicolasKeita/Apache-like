@@ -37,6 +37,10 @@ void zia::SSL::_configureContext()
         ERR_print_errors_fp(stderr);
         exit(EXIT_FAILURE);
     }
+    else
+    {
+        std::cout << "[DEBUG ZIA] Certificate and Key SSL are loaded !" << std::endl;
+    }
 }
 
 void zia::SSL::_createContext()

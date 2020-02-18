@@ -42,7 +42,8 @@ namespace uti::network {
         {}
 
         void turnOn(const unsigned short int port,
-                    std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
+                    std::function<void(int)> onAccept,
+                    std::function<ProtocolDataPacket(const ProtocolDataPacket &, int)> onPacketReceived)
         {
             using boost::asio::ip::tcp;
             _sockets.push_back(tcp::socket(_io_context));
@@ -52,6 +53,7 @@ namespace uti::network {
 
             while (true) {
                 _acceptor->accept(_sockets.back());
+                onAccept(_sockets.back().native_handle());
                 const ProtocolDataPacket clientMessage = this->getIncomingClientMessage(_sockets.back());
                 std::thread thread_obj(&uti::network::ServerTcpMultiThreadWrapper<ProtocolDataPacket>::_handleRequest,
                                        this,
@@ -119,10 +121,11 @@ namespace uti::network {
         void _handleRequest([[maybe_unused]] std::list<boost::asio::ip::tcp::socket> &sockets,
                             boost::asio::ip::tcp::socket &socket,
                             const ProtocolDataPacket data,
-                            std::function<ProtocolDataPacket(const ProtocolDataPacket &)> onPacketReceived)
+                            std::function<ProtocolDataPacket(const ProtocolDataPacket &, int)> onPacketReceived)
         {
-            const ProtocolDataPacket serverReplyToClient = onPacketReceived(data);
-            _sendMessage(socket, serverReplyToClient);
+            const ProtocolDataPacket serverReplyToClient = onPacketReceived(data, socket.native_handle());
+            if (serverReplyToClient.size()) // Works for std::string
+                _sendMessage(socket, serverReplyToClient);
             socket.close();
             // TODO remove the socket from the list of sockets after closing it.
         }

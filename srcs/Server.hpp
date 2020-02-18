@@ -23,9 +23,13 @@ namespace zia {
             _pipeline.loadModules();
             std::cout << "[DEBUG ZIA] Modules loaded !" << std::endl;
             this->turnOn(portToOpen,
+                         std::bind(&zia::ProtocolHandler::onAccept,
+                                   _protocolHandler,
+                                   std::placeholders::_1),
                          std::bind(&zia::ProtocolHandler::onPacketReceived,
                                    _protocolHandler,
-                                   std::placeholders::_1)
+                                   std::placeholders::_1,
+                                   std::placeholders::_2)
             );
         }
     private:

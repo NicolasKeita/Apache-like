@@ -25,7 +25,6 @@ namespace zia {
         void                        _configureContext();
 
     private:
-        boost::asio::ssl::context   _context;
         SSL_CTX *                   _ctx;
     };
 }

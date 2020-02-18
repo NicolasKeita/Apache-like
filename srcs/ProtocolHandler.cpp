@@ -7,16 +7,35 @@
 #include <fstream>
 #include "ProtocolHandler.hpp"
 
-ProtocolDataPacket zia::ProtocolHandler::onPacketReceived(const ProtocolDataPacket &incomingPacket)
+
+
+ProtocolDataPacket zia::ProtocolHandler::onPacketReceived(const ProtocolDataPacket &incomingPacket, int fd)
 {
     // Cast to ByteArray cuz "oZ API" requires a std::vector<int8_t> == ByteArray but I use std::string
     oZ::ByteArray byteArray(incomingPacket.begin(), incomingPacket.end());
 
-    oZ::Context context(oZ::Packet(std::move(byteArray), oZ::Endpoint()));
+    oZ::Context context(oZ::Packet(std::move(byteArray), oZ::Endpoint(), fd));
     _pipeline.runPipeline(context);
 
+    if (context.getResponse().getReason() == "ssl")
+        return "";
+    return _createResponse(context);
+}
+
+void zia::ProtocolHandler::onAccept(int fd)
+{
+    oZ::ByteArray byteArray {};
+    oZ::Context context(oZ::Packet(std::move(byteArray), oZ::Endpoint(), fd));
+    context.setState(oZ::State::BeforeParse);
+    std::cout << "On Accept before Parse" << std::endl;
+    _pipeline.runPipeline(context);
+}
+
+std::string zia::ProtocolHandler::_createResponse(oZ::Context &context) const
+{
     std::string responseBody = _createBodyToSend(context);
     std::string responseHeader = _createHeaderToSend(context);
+    std::cout << "[DEBUG ZIA] Response created in the main server" << std::endl;
     return responseHeader + "\n" + responseBody;
 }
 

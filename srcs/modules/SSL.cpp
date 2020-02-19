@@ -24,6 +24,7 @@ zia::SSL::SSL()
 
 void zia::SSL::_configureContext()
 {
+    /*
     EVP_PKEY *pkey = generatePrivateKey();
     X509 *x509 = generateCertificate(pkey);
 
@@ -36,8 +37,8 @@ void zia::SSL::_configureContext()
     RSA_free(rsa);
 
     SSL_CTX_set_verify(_ctx, SSL_VERIFY_NONE, 0);
+     */
 
-    /*
     SSL_CTX_set_ecdh_auto(_ctx, 1);
     if (SSL_CTX_use_certificate_file(_ctx,
                                      "mycert.pem",
@@ -54,8 +55,8 @@ void zia::SSL::_configureContext()
     else
     {
         std::cout << "[DEBUG ZIA] Certificate and Key SSL are loaded !" << std::endl;
-    }*/
-    std::cout << "[DEBUG ZIA] Certificate and Key SSL are loaded !" << std::endl;
+    }
+   // std::cout << "[DEBUG ZIA] Certificate and Key SSL are loaded !" << std::endl;
 }
 
 void zia::SSL::_createContext()
@@ -162,7 +163,7 @@ bool zia::SSL::_onInterpret(oZ::Context & context)
     std::cout << "[DEBUG ZIA] SSL Handshake succeed ! OK" << std::endl;
     SSL_write(ssl, reply, static_cast<int>(strlen(reply)));
     oZ::Log(oZ::Information) << "Module 'SSL' wrote successfully its message";
-    context.getResponse().getReason() = "ssl";
+    context.setState(oZ::State::Completed);
     return true;
 }
 

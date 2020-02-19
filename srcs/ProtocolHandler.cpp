@@ -17,7 +17,7 @@ ProtocolDataPacket zia::ProtocolHandler::onPacketReceived(const ProtocolDataPack
     oZ::Context context(oZ::Packet(std::move(byteArray), oZ::Endpoint(), fd));
     _pipeline.runPipeline(context);
 
-    if (context.getResponse().getReason() == "ssl")
+    if (context.getState() == oZ::State::Completed)
         return "";
     return _createResponse(context);
 }

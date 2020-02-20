@@ -19,13 +19,16 @@ namespace zia {
         void                        onRegisterCallbacks(oZ::Pipeline &pipeline) override;
 
     private:
-        bool                        _onInterpret(oZ::Context &context);
+        bool                        _onBeforeParse(oZ::Context &context);
+        bool                        _onAfterInterpret(oZ::Context &context);
         void static                 _initOpenSSL();
         void                        _createContext();
         void                        _configureContext();
+        bool                        _handshake(int fd_to_the_client);
 
     private:
         SSL_CTX *                   _ctx;
+        ::SSL *                     _ssl_per_client;
     };
 }
 

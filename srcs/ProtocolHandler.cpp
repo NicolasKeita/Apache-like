@@ -26,8 +26,7 @@ void zia::ProtocolHandler::onAccept(int fd)
 {
     oZ::ByteArray byteArray {};
     oZ::Context context(oZ::Packet(std::move(byteArray), oZ::Endpoint(), fd));
-    context.setState(oZ::State::BeforeParse);
-    std::cout << "On Accept before Parse" << std::endl;
+    std::cout << "[DEBUG ZIA] OnAccept() called" << std::endl;
     _pipeline.runPipeline(context);
 }
 

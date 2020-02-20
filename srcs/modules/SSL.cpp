@@ -81,11 +81,8 @@ bool zia::SSL::_onBeforeParse(oZ::Context & context)
 {
     std::cout << "[DEBUG ZIA] SSL module has been called" << std::endl;
 
-    int fd = context.getPacket().getFileDescriptor();
-    bool ret = _handshake(fd);
-
-    context.setState(oZ::State::Interpret);
-    return ret;
+    int fd_to_the_client = context.getPacket().getFileDescriptor();
+    return _handshake(fd_to_the_client);
 }
 
 bool zia::SSL::_onAfterInterpret(oZ::Context &context)

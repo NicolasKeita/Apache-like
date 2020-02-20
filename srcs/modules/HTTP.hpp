@@ -14,7 +14,8 @@
 namespace zia {
     class HTTP : public oZ::IModule {
     public:
-
+        [[nodiscard]] const char *  getName() const noexcept override;
+        void                        onRegisterCallbacks(oZ::Pipeline &pipeline) override;
     };
 }
 

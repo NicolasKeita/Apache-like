@@ -103,12 +103,7 @@ bool zia::SSL::_handshake(int fd_to_the_client)
 
     SSL_set_fd(_ssl_per_client, fd_to_the_client);
 
-    BIO *accept_bio = BIO_new_socket(fd_to_the_client, BIO_CLOSE); //
-    SSL_set_bio(_ssl_per_client, accept_bio, accept_bio); //
-
     auto ret = SSL_accept(_ssl_per_client);
-
-    BIO *bio = BIO_pop(accept_bio); //
 
     if (ret <= 0) {
         int err = SSL_get_error(_ssl_per_client, ret);

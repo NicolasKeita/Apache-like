@@ -29,11 +29,8 @@ namespace zia {
     private:
         std::string         _contextResponseToString(oZ::Context &context) const;
 
-        std::string         _createResponse(oZ::Context & context) const;
-        std::string         _createHeaderToSend(oZ::Context & context) const;
-        std::string         _createBodyToSend(oZ::Context & context) const;
-
-        oZ::Pipeline &  _pipeline;
+    private:
+        oZ::Pipeline &      _pipeline;
     };
 }
 

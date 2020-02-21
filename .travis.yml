@@ -69,7 +69,7 @@ before_script:
 script:
   - cmake --build ./
 
-  #run tests on network library
+  #run tests on libmy_parsers library
   - cd ../lib/libmy_parsers/
   - mkdir -p ./build/
   - cd ./build/

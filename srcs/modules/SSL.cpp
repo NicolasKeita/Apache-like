@@ -52,10 +52,8 @@ void zia::SSL::_createContext()
 void zia::SSL::_initOpenSSL()
 {
     SSL_load_error_strings();
-//    OpenSSL_add_ssl_algorithms();
-    OpenSSL_add_all_algorithms();
+    OpenSSL_add_ssl_algorithms();
     SSL_library_init();
-
 }
 
 const char * zia::SSL::getName() const noexcept
@@ -94,10 +92,7 @@ bool zia::SSL::_onAfterInterpret(oZ::Context &context)
     if (context.getResponse().getReason() != "AfterInterpret")
         return true;
     std::string reply = _contextResponseToString(context);
-//    char reply[] = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
 
-    std::cout << "MESSAGE : " << reply << std::endl;
-//    SSL_write(_ssl_per_client, reply, static_cast<int>(strlen(reply)));
     SSL_write(_ssl_per_client, reply.c_str(), static_cast<int>(reply.size()));
     std::cout << "[DEBUG ZIA] Message SSL sent to client" << std::endl;
 
@@ -109,7 +104,7 @@ bool zia::SSL::_onAfterInterpret(oZ::Context &context)
 
 bool zia::SSL::_handshake(int fd_to_the_client)
 {
-    _ssl_per_client = SSL_new(_ctx); // TODO : free later
+    _ssl_per_client = SSL_new(_ctx);
 
     SSL_set_fd(_ssl_per_client, fd_to_the_client);
 

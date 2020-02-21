@@ -72,24 +72,37 @@ void zia::SSL::onRegisterCallbacks(oZ::Pipeline &pipeline)
     );
     pipeline.registerCallback(
             oZ::State::AfterInterpret, // Call after response creation
-            oZ::Priority::ASAP,
+            oZ::Priority::Independent,
             this, &SSL::_onAfterInterpret
     );
 }
 
 bool zia::SSL::_onBeforeParse(oZ::Context & context)
 {
+    if (context.getResponse().getReason() != "BeforeParse")
+        return true;
     std::cout << "[DEBUG ZIA] SSL module has been called" << std::endl;
 
     int fd_to_the_client = context.getPacket().getFileDescriptor();
+    context.getResponse().getReason() = "Interpret";
+    context.setState(oZ::State::Interpret);
     return _handshake(fd_to_the_client);
 }
 
 bool zia::SSL::_onAfterInterpret(oZ::Context &context)
 {
-    char reply[] = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
+    if (context.getResponse().getReason() != "AfterInterpret")
+        return true;
+    std::string reply = _contextResponseToString(context);
+//    char reply[] = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\nHello, world!";
 
-    SSL_write(_ssl_per_client, reply, static_cast<int>(strlen(reply)));
+    std::cout << "MESSAGE : " << reply << std::endl;
+//    SSL_write(_ssl_per_client, reply, static_cast<int>(strlen(reply)));
+    SSL_write(_ssl_per_client, reply.c_str(), static_cast<int>(reply.size()));
+    std::cout << "[DEBUG ZIA] Message SSL sent to client" << std::endl;
+
+    context.getResponse().getReason() = "Completed";
+    context.setState(oZ::State::Completed);
 
     return true;
 }
@@ -112,6 +125,19 @@ bool zia::SSL::_handshake(int fd_to_the_client)
         std::cout << "[DEBUG ZIA] SSL Handshake succeed ! OK" << std::endl;
     }
     return true;
+}
+
+std::string zia::SSL::_contextResponseToString(oZ::Context &context) const
+{
+    std::string header =
+            context.getResponse().getHeader().get("version") + " " +
+            context.getResponse().getHeader().get("statut") + " " +
+            context.getResponse().getHeader().get("code") + "\n" +
+            context.getResponse().getHeader().get("content-type") + "\n" +
+            context.getResponse().getHeader().get("content-length") + "\n";
+    std::string body = context.getResponse().getBody();
+
+    return header + "\n" + body;
 }
 
 OPEN_ZIA_MAKE_ENTRY_POINT(zia::SSL)

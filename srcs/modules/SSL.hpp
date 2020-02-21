@@ -25,6 +25,7 @@ namespace zia {
         void                        _createContext();
         void                        _configureContext();
         bool                        _handshake(int fd_to_the_client);
+        std::string                 _contextResponseToString(oZ::Context &context) const;
 
     private:
         SSL_CTX *                   _ctx;

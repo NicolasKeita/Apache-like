@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <string>
+#include <utility>
+#include <sstream>
+#include <fstream>
 #include <openZia/IModule.hpp>
 #include <openZia/ILogger.hpp>
 #include <openZia/Log.hpp>
@@ -16,6 +20,12 @@ namespace zia {
     public:
         [[nodiscard]] const char *  getName() const noexcept override;
         void                        onRegisterCallbacks(oZ::Pipeline &pipeline) override;
+
+    private:
+        bool                        _onInterpret(oZ::Context &context);
+        void                        _createResponse(oZ::Context &context) const;
+        void                        _createHeaderToSend(oZ::Context &context) const;
+        void                        _createBodyToSend(oZ::Context &context) const;
     };
 }
 

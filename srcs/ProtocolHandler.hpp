@@ -27,6 +27,8 @@ namespace zia {
         ProtocolDataPacket  onPacketReceived(const ProtocolDataPacket & incomingPacket, int fd);
         void                onAccept(int fd);
     private:
+        std::string         _contextResponseToString(oZ::Context &context) const;
+
         std::string         _createResponse(oZ::Context & context) const;
         std::string         _createHeaderToSend(oZ::Context & context) const;
         std::string         _createBodyToSend(oZ::Context & context) const;
